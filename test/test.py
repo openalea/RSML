@@ -7,14 +7,14 @@ from openalea.deploy.shared_data import shared_data
 import rsml
 
 img_dir = shared_data(rsml)
-data = shared_data(rsml)/'rsml'
+data = shared_data(rsml)
 
 files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 #print files
 
 fn= files[N]
 
-print "read ", fn 
+print "read ", fn
 
 
 
@@ -32,11 +32,11 @@ def rw(fn, display=False):
 def plot(n=N):
 	fn= files[n]
 
-	print "read ", fn 
+	print "read ", fn
 
 	gs = rw(fn)
 
-def test_rootnav(n=0):
+def notest_rootnav(n=0):
 	rootnav_data = data/'rootnav'
 	files = [fn for fn in rootnav_data.glob('*.rsml') if 'old' not in fn]
 
@@ -48,7 +48,7 @@ def test_rootnav(n=0):
 	gs = rw(fn)
 	return gs
 
-def test_rsa(id=1):
+def notest_rsa(id=1):
 	rsa_data = data/'rootsystemanalyser'
 	files = [fn for fn in rsa_data.glob('lupine*/lupine*_%d/*.rsml'%id) if 'old' not in fn]
 
@@ -68,7 +68,7 @@ def f2():
 	files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 	fn= files[0]
 
-	print "read ", fn 
+	print "read ", fn
 
 	def get_file(f, ext='.png'):
 		return f.splitext()[0]+ext
