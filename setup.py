@@ -35,10 +35,10 @@ setup(
     author_email=authors_email,
     url=url,
     license=license,
-    keywords='rsml',	
+    keywords='rsml',
 
     # package installation
-    packages=packages,	
+    packages=packages,
     package_dir=package_dir,
 
     # Namespace packages creation by deploy
@@ -57,13 +57,13 @@ setup(
     # (folowing is to include all versioned files other than .py)
     include_package_data=True,
     # (you can provide an exclusion dictionary named exclude_package_data to remove parasites).
-    # alternatively to global inclusion, list the file to include   
+    # alternatively to global inclusion, list the file to include
     #package_data = {'' : ['*.pyd', '*.so'],},
-
+    share_dirs = {'share': 'share'},
     # postinstall_scripts = ['',],
 
-    # Declare scripts and wralea as entry_points (extensions) of your package 
-    entry_points={ 
+    # Declare scripts and wralea as entry_points (extensions) of your package
+    entry_points={
         'wralea': ['rsml = rsml_wralea'],
     },
 )
