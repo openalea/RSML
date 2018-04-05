@@ -22,6 +22,15 @@ The **rsml** python package provides:
 
 ### Installation
 
+#### Conda 
+
+The **rsml** package is an openalea package that can be installed using conda. After installing conda, enter the following command on your conda environment::
+
+    conda install rsml -c openalea/label/unstable -c openalea
+    
+
+#### From the source
+
 The **rsml** package is an openalea package and thus requires openalea.deploy to be installed. To install it, go to the rsml folder and enter the following command::
 
     python setup.py install
