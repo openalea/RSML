@@ -1,0 +1,33 @@
+{% set version = "1.0.1" %}
+
+package:
+  name: rsml
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  preserve_egg_dir: True
+  number: 0
+  script: python setup.py install
+
+requirements:
+  build:
+    - openalea.deploy
+  run:
+    - python
+    - openalea.core
+    - openalea.mtg
+    - matplotlib
+    - numpy
+
+test:
+  imports:
+    - rsml
+
+about:
+  home: http://github.com/openalea/RSML
+  license: Cecill-c License
+  summary: RSML - The language of root architecture
+
