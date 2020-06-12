@@ -4,12 +4,18 @@ __revision__ = "$Id: $"
 import sys
 
 from setuptools import setup, find_packages
-from openalea.deploy.metainfo import read_metainfo
 
 # Reads the metainfo file
-metadata = read_metainfo('metainfo.ini', verbose=True)
-for key, value in metadata.iteritems():
-    exec("%s = '%s'" % (key, value))
+version = '1.0.0'
+release = '1.0'
+name = 'RSML'
+package = name
+description= 'RSML package provide IO functionality between .rsml file and MTG'
+long_description=  'RSML package provide IO functionality between .rsml file and MTG, as well as ploting and standard measurements. '
+authors= 'C. Pradal, J. Diener'
+authors_email = 'christophe.pradal@inria.fr, julien.diener@inria.fr'
+url = 'https://github.com/RootSystemML/RSML-conversion-tools'
+license = 'Cecill-C'
 
 # Packages list, namespace and root directory of packages
 
@@ -19,13 +25,8 @@ package_dir = dict([('', 'src')] + [(pkg, "src/" + pkg) for pkg in pkgs])
 
 # dependencies to other eggs
 setup_requires = ['openalea.deploy']
-if("win32" in sys.platform):
-    install_requires = []
-else:
-    install_requires = []
 
 # web sites where to find eggs
-dependency_links = ['http://openalea.gforge.inria.fr/pi']
 setup(
     name=name,
     version=version,
@@ -48,8 +49,8 @@ setup(
 
     # Dependencies
     setup_requires=setup_requires,
-    install_requires=install_requires,
-    dependency_links=dependency_links,
+    install_requires=[],
+    #dependency_links=dependency_links,
 
 
 
