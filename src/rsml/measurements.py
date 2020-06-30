@@ -147,7 +147,7 @@ class RSML_Measurements(list):
                 
         with open(filename) as f:
             content = reader(f,delimiter=sep)
-            keys = content.next()
+            keys = next(content)
             for row in content:
                 self.append(dict(zip(keys,map(try_eval,row))))
                 

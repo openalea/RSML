@@ -17,6 +17,7 @@ Visualisation:
 3. Annotations
 
 """
+from __future__ import print_function
 ##############################################################################
 # XML SmartRoot / RootNav reader and writer
 ##############################################################################
@@ -61,11 +62,11 @@ class Parser(object):
         try:
             tag = elt.tag.replace('-','_')
             return self.__getattribute__(tag)(elt.getchildren(), **elt.attrib)
-        except Exception, e:
+        except Exception as e:
             if self.debug:
-                print e
+                print(e)
                 #raise Exception("Unvalid element %s"%elt.tag)
-                print "Unvalid element %s"%elt.tag
+                print("Unvalid element %s"%elt.tag)
 
     @staticmethod
     def add_field(elt, my_dict) :
@@ -191,7 +192,7 @@ class Parser(object):
                 gprop.update(read_xml_tree(a))
                 
             # read property value
-            elif a.attrib.has_key('value'):
+            elif 'value' in a.attrib:
                 proxy_node.__setattr__(a.tag, literal_eval(a.attrib['value']))
             else:
                 proxy_node.__setattr__(a.tag, a.text)
@@ -275,7 +276,7 @@ class Parser(object):
                 anno.points.append(point)
             else:
                 # Error
-                print 'Invalid Annotation format', elt.tag
+                print('Invalid Annotation format', elt.tag)
 
 
 class Annotation(object):
@@ -366,7 +367,7 @@ class Dumper(object):
                 
         self.image(gmetadata)
         self.property_definitions(gmetadata)
-        print 'TODO: time-sequence'
+        print('TODO: time-sequence')
         
     def image(self,metadata):
         """ dump image element of metadata """

@@ -104,7 +104,7 @@ def continuous_to_discrete(g):
 
         # create 1st segment
         position = geometry[axe]
-        if parent_node.has_key(axe):
+        if axe in parent_node:
             p_seg = axe_segments[(p_axe,parent_node[axe])]
             seg   = g.add_component(axe, edge_type='/', position=position[1])
             g.add_child(p_seg,seg, edge_type='+')

@@ -72,12 +72,12 @@ def set_metadata(g):
     metadata.update(g.graph_properties().get('metadata',{}))
     
     # image metadata
-    if metadata.has_key('image'):
+    if 'image' in metadata:
         if isinstance(metadata['image'],basestring):
             metadata['image'] = dict(name=metadata['image'])
         image = metadata['image']
         
-        if not image.has_key('sha256'):                                  
+        if 'sha256' not in image:                                  
             try:
                 import hashlib
                 with open(image['name']) as f:
@@ -86,7 +86,7 @@ def set_metadata(g):
             except IOError: # no such file
                 pass
         
-        if not image.has_key('captured'):
+        if 'captured' not in image:
             try:
                 from os.path import getctime
                 creation = getctime(image['name'])

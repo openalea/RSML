@@ -1,3 +1,4 @@
+from __future__ import print_function
 from openalea.deploy import shared_data
 
 N = 2
@@ -14,7 +15,7 @@ files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 
 fn= files[N]
 
-print "read ", fn
+print("read ", fn)
 
 
 
@@ -23,7 +24,7 @@ def rw(fn, display=False):
 	if display:
 		dump = rsml.Dumper()
 		s = dump.dump(gs)
-		print s
+		print(s)
 	rsml.plot3d(gs, img_dir='.')
 	return gs
 
@@ -32,7 +33,7 @@ def rw(fn, display=False):
 def plot(n=N):
 	fn= files[n]
 
-	print "read ", fn
+	print("read ", fn)
 
 	gs = rw(fn)
 
@@ -40,7 +41,7 @@ def notest_rootnav(n=0):
 	rootnav_data = data/'rootnav'
 	files = [fn for fn in rootnav_data.glob('*.rsml') if 'old' not in fn]
 
-	print 'nb files: ', len(files)
+	print('nb files: ', len(files))
 	if  n < 0 or n >= len(files):
 		n = 0
 
@@ -68,7 +69,7 @@ def f2():
 	files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 	fn= files[0]
 
-	print "read ", fn
+	print("read ", fn)
 
 	def get_file(f, ext='.png'):
 		return f.splitext()[0]+ext
