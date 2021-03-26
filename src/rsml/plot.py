@@ -6,11 +6,19 @@ Visualisation:
 3. Annotations
 
 """
+try:
+  basestring
+except NameError:
+  basestring = str
+
+from copy import copy
+from collections import Iterable
+
+import rsml
 
 
 def plot3d(g, color=None, img_dir='.'):
     import openalea.plantgl.all as pgl
-    from copy import copy
 
     default_color = (177, 123, 6)
     colors = {}
@@ -47,14 +55,14 @@ def plot3d(g, color=None, img_dir='.'):
                 )
             else:
                 _geom = pgl.Extrusion(
-                    pgl.Polyline(map(pgl.Vector3, geoms[vid])), 
+                    pgl.Polyline([pgl.Vector3(pt) for pt in geoms[vid]]), 
                     section,
                     pgl.Point2Array([(diameters, diameters) for i in range(len(geoms))])
                 )
 
         else:
             _geom = pgl.Extrusion(
-                pgl.Polyline(map(pgl.Vector3, geoms[vid])), 
+                pgl.Polyline([pgl.Vector3(pt) for pt in geoms[vid]]), 
                 section)
 
         return pgl.Shape(_geom, _color)
@@ -80,7 +88,6 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
           Format is matplotlib colors (e.g. 'b', 'g', 'y', 'r')
     """  
     import numpy as np  
-    from collections import Iterable
     from matplotlib import pyplot as plt
 
     if img_file is not None:
@@ -133,13 +140,12 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
         else:
             ax = plt.gca()
             ax.set_ylim(sorted(ax.get_ylim(), reverse=True))
-        ax.axis('equal')
+        #ax.axis('equal')
 
 
 def multiple_plot(files, image=True):
     from openalea.core.path import path
     from matplotlib import pyplot as plt
-    import rsml
 
     def get_file(f):    
         exts = ['.png', '.jpg', '.tif']

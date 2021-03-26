@@ -29,7 +29,7 @@ def plot(x,y, label):
     # plot
     X = np.linspace(0,x.max(),5)
     def poly(x,c):
-        return sum([ci*(X**i) for i,ci in enumerate(c)])
+        return sum(ci*(X**i) for i,ci in enumerate(c))
         
     plt.plot(X,poly(X,c[::-1]),l.get_color(), label=label, lw=2)
 
@@ -41,7 +41,7 @@ def plot_from_file(rsml_file, ax, split_plant, label=""):
 
     # extract properties & measurments for all roots
     root = measurements.root_order(g)               # ids of lateral roots
-    root = [r for r,o in root.iteritems() if o==2]
+    root = [r for r,o in root.items() if o==2]
     length = measurements.root_length(g,root)       # length of roots
     ppos = measurements.parent_position(g,roots=root,distance2tip=True)  # branching position on parent                
     plant = dict((r,g.complex(r)) for r in root)    # plant id of all roots
