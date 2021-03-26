@@ -1,14 +1,14 @@
 """
 Test discrete mtg -> continuous -> rsml, and backward
 """
+import pickle
+import rsml
 
 def test_load_discrete():
-    import cPickle
     from openalea.deploy.shared_data import shared_data
-    import rsml
     filename = shared_data(rsml)/'discrete.bmtg'
-    with open(filename) as f:
-        g = cPickle.load(f)
+    with open(filename, 'rb') as f:
+        g = pickle.load(f, encoding='latin-1')
     return g
     
 def simple_tree():

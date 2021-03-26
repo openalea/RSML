@@ -4,8 +4,15 @@ Conversion from discrete to continuous mtg, and vice versa.
 In practice, here continuous mtg means the mtg equivalent to rsml.
 
 """
+try:
+  basestring
+except NameError:
+  basestring = str
+
 from openalea.mtg.algo import local_axis
 from openalea.mtg.algo import traversal
+
+from rsml.metadata import add_property_definition
 
 def discrete_to_continuous(g, position='position'):
     """
@@ -34,7 +41,6 @@ def discrete_to_continuous(g, position='position'):
       - convert "discrete" functions (such as diameter)
       - convert continuous functions?
     """
-    from rsml.metadata import add_property_definition
     
     # accessor of the segment position property
     if isinstance(position, basestring):
@@ -77,7 +83,7 @@ def discrete_to_continuous(g, position='position'):
         g.remove_tree(node0)
 
     # set parent-node property
-    for axe,p_node in axe_branch.iteritems():
+    for axe,p_node in axe_branch.items():
         parent_node[axe] = geom_index[p_node]
 
     add_property_definition(g,label='parent-node', type=int)

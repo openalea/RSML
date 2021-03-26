@@ -25,6 +25,11 @@ Optional metadata:
 function also fill missing items, folowing the specified behavior describe in
 the function documentation.
 """
+try:
+  basestring
+except NameError:
+  basestring = str
+
 import xml.etree.ElementTree as xml
 
 
@@ -118,8 +123,10 @@ def add_property_definition(g, label, type, unit=None, default=None):
            the suitable rsml type is selected using the `rsml_type` function.
     """
     prop = dict(type=type if isinstance(type,basestring) else rsml_type(type))
-    if unit    is not None: prop['unit']    = unit
-    if default is not None: prop['default'] = default
+    if unit is not None: 
+        prop['unit'] = unit
+    if default is not None: 
+        prop['default'] = default
     
     gmeta = g.graph_properties().setdefault('metadata',{})
     prop_def = gmeta.setdefault('property-definitions', {})
@@ -127,16 +134,23 @@ def add_property_definition(g, label, type, unit=None, default=None):
 
 def rsml_type(python_type):
     """ Automatically select rsml type for the given `python_type` """
-    if   issubclass(python_type, bool):  return 'boolean' 
-    elif issubclass(python_type, int):   return 'integer' 
-    elif issubclass(python_type, long):  return 'integer' 
-    elif issubclass(python_type, float): return 'real'
+    if issubclass(python_type, bool):  
+        return 'boolean' 
+    elif issubclass(python_type, int):   
+        return 'integer' 
+    # not valid anymore in Python 3
+    #elif issubclass(python_type, long):  
+    #    return 'integer' 
+    elif issubclass(python_type, float): 
+        return 'real'
     else:
         from datetime import datetime
-        if issubclass(python_type, datetime): return 'datetime'
-        else:                                return 'string'
+        if issubclass(python_type, datetime): 
+            return 'datetime'
+        else:                                
+            return 'string'
 
-_literal_types = set([type(None),bool,int,float,long,complex,unicode,str])
+_literal_types = set([type(None),bool,int,float,complex,str])
 def filter_literal(obj, default=None):
     """ return given `obj` with only "literal" types
     
