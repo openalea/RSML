@@ -72,12 +72,12 @@ def set_metadata(g):
     metadata.update(g.graph_properties().get('metadata',{}))
     
     # image metadata
-    if metadata.has_key('image'):
-        if isinstance(metadata['image'],basestring):
+    if 'image' in metadata:
+        if isinstance(metadata['image'],str):
             metadata['image'] = dict(name=metadata['image'])
         image = metadata['image']
         
-        if not image.has_key('sha256'):                                  
+        if 'sha256' not in image:                                  
             try:
                 import hashlib
                 with open(image['name']) as f:
@@ -86,7 +86,7 @@ def set_metadata(g):
             except IOError: # no such file
                 pass
         
-        if not image.has_key('captured'):
+        if 'captured' not in image:
             try:
                 from os.path import getctime
                 creation = getctime(image['name'])
@@ -117,7 +117,7 @@ def add_property_definition(g, label, type, unit=None, default=None):
            Either a string of the rsml type, or a python type object for which
            the suitable rsml type is selected using the `rsml_type` function.
     """
-    prop = dict(type=type if isinstance(type,basestring) else rsml_type(type))
+    prop = dict(type=type if isinstance(type,str) else rsml_type(type))
     if unit    is not None: prop['unit']    = unit
     if default is not None: prop['default'] = default
     
@@ -129,14 +129,14 @@ def rsml_type(python_type):
     """ Automatically select rsml type for the given `python_type` """
     if   issubclass(python_type, bool):  return 'boolean' 
     elif issubclass(python_type, int):   return 'integer' 
-    elif issubclass(python_type, long):  return 'integer' 
+    elif issubclass(python_type, int):  return 'integer' 
     elif issubclass(python_type, float): return 'real'
     else:
         from datetime import datetime
         if issubclass(python_type, datetime): return 'datetime'
         else:                                return 'string'
 
-_literal_types = set([type(None),bool,int,float,long,complex,unicode,str])
+_literal_types = set([type(None),bool,int,float,int,complex,str,str])
 def filter_literal(obj, default=None):
     """ return given `obj` with only "literal" types
     
@@ -159,7 +159,7 @@ def filter_literal(obj, default=None):
     elif isinstance(obj,tuple):
         return tuple([filter_literal(v,default) for v in obj])
     elif hasattr(obj,'iteritems'):
-        return dict((k,filter_literal(v,default)) for k,v in obj.iteritems())
+        return dict((k,filter_literal(v,default)) for k,v in obj.items())
     elif hasattr(obj,'__iter__'):
         return [filter_literal(v,default) for v in obj]
     else:

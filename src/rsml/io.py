@@ -61,11 +61,11 @@ class Parser(object):
         try:
             tag = elt.tag.replace('-','_')
             return self.__getattribute__(tag)(elt.getchildren(), **elt.attrib)
-        except Exception, e:
+        except Exception as e:
             if self.debug:
-                print e
+                print(e)
                 #raise Exception("Unvalid element %s"%elt.tag)
-                print "Unvalid element %s"%elt.tag
+                print("Unvalid element %s"%elt.tag)
 
     @staticmethod
     def add_field(elt, my_dict) :
@@ -191,7 +191,7 @@ class Parser(object):
                 gprop.update(read_xml_tree(a))
                 
             # read property value
-            elif a.attrib.has_key('value'):
+            elif 'value' in a.attrib:
                 proxy_node.__setattr__(a.tag, literal_eval(a.attrib['value']))
             else:
                 proxy_node.__setattr__(a.tag, a.text)
@@ -275,7 +275,7 @@ class Parser(object):
                 anno.points.append(point)
             else:
                 # Error
-                print 'Invalid Annotation format', elt.tag
+                print('Invalid Annotation format', elt.tag)
 
 
 class Annotation(object):
@@ -334,7 +334,7 @@ class Dumper(object):
           - an element otherwise with text set to `str(item-value)`
         """
         elt = xml.SubElement(parent, tag)
-        for name, child in tree.iteritems():
+        for name, child in tree.items():
             if isinstance(child,dict):
                 self.SubTree(elt, name, child)
             else:
@@ -366,7 +366,7 @@ class Dumper(object):
                 
         self.image(gmetadata)
         self.property_definitions(gmetadata)
-        print 'TODO: time-sequence'
+        print('TODO: time-sequence')
         
     def image(self,metadata):
         """ dump image element of metadata """
@@ -374,7 +374,7 @@ class Dumper(object):
         if image is None: return
         
         img = self.SubElement(self.xml_meta, 'image')
-        for tag, text in image.iteritems():
+        for tag, text in image.items():
             self.SubElement(img, tag, text=str(text))
                 
     def property_definitions(self, metadata):
@@ -384,10 +384,10 @@ class Dumper(object):
             return
         
         pdefs = self.SubElement(self.xml_meta, 'property-definitions')
-        for label,prop in gproperties.iteritems():
+        for label,prop in gproperties.items():
             pdef = self.SubElement(pdefs, tag='property-definition')
             self.SubElement(pdef, tag='label', text=str(label))
-            tags = prop.keys()
+            tags = list(prop.keys())
             tags = [tag for tag in ['type','unit','default'] if tag in tags]
             for tag in tags:
                 self.SubElement(pdef, tag=tag, text=str(prop[tag]))
@@ -400,7 +400,7 @@ class Dumper(object):
 
         # put non-metadata graph properties into 'graph_property' scene 
         # TODO: Add other scene properties?
-        gprop = dict((k,v) for (k,v) in g.graph_properties().iteritems() if k!='metadata')
+        gprop = dict((k,v) for (k,v) in g.graph_properties().items() if k!='metadata')
         if len(gprop):
             gprop = metadata.filter_literal(gprop)
             #sc_prop  = self.SubElement(self.xml_scene, 'properties')
@@ -477,11 +477,11 @@ class Dumper(object):
             xyz=['x','y','z']
             for pt in polyline: 
                 pt_elt = self.SubElement(tb, 'point', 
-                                         attrib=dict(zip(xyz,map(str,pt))))
+                                         attrib=dict(list(zip(xyz,list(map(str,pt))))))
                 
         else:
             from warnings import warn 
-            xml2mtg_id = dict((xml_id,mtg_id) for mtg_id,xml_id in self.xml_nodes.iteritems())
+            xml2mtg_id = dict((xml_id,mtg_id) for mtg_id,xml_id in self.xml_nodes.items())
             mtg_id = xml2mtg_id.get(axis,'undefined')
             warn('Root axis with id={} has no geometry'.format(mtg_id)) # mandatory in rsml
                     
@@ -495,7 +495,7 @@ class Dumper(object):
         if len(ax_prop)==0: return
         
         elt_prop = self.SubElement(axis, tag='properties')
-        for prop,value in ax_prop.iteritems():
+        for prop,value in ax_prop.items():
             self.SubElement(elt_prop, tag=prop, attrib={'value':str(value)})
         
     def functions(self, axis, **props):
@@ -551,8 +551,8 @@ def mtg2rsml(g, rsml_file):
     """
     dump = Dumper()
     s = dump.dump(g)
-    if isinstance(rsml_file,basestring):
-        with open(rsml_file, 'w') as f:
+    if isinstance(rsml_file,str):
+        with open(rsml_file, 'wb') as f: # F. Bauget 2022-04-11: with python 3 xml.tostring(self.xml_root, encoding='UTF-8') gives bytes so I open in binary mode
             f.write(s)
     else:
         rsml_file.write(s)

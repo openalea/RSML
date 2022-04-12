@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rsml xmlns:po="http://www.plantontology.org/xml-dtd/po.dtd">
+	<metadata>
+		<version>1</version>
+		<unit>pixel</unit>
+		<resolution>1</resolution>
+		<last-modified>2014-02-20T00:00:00</last-modified>
+		<software>smartroot</software>
+		<user>diener</user>
+		<file-key>RSML-example:arabidopsis_simple</file-key>
+		<image>
+			<name>arabidopsis_simple</name>
+			<captured>2014-02-19T00:00:00</captured>
+		</image>
+	</metadata>
+	<scene>
+		<plant id="1" label="simple_arabidopsis_rsa">
+			<root id="577272dc-2d84-4fc3-8e9c-527add40f84d" label="primary" po:accession="PO:0020127">
+				<geometry>
+					<polyline>
+					<point x="264.74475" y="69.61433" />
+					<point x="271.19568" y="109.56338" />
+					<point x="273.701" y="129.66077" />
+					<point x="274.0443" y="147.86255" />
+					<point x="274.43555" y="167.606" />
+					<point x="273.84677" y="186.23691" />
+					<point x="273.24664" y="205.22743" />
+					<point x="272.40265" y="224.2727" />
+					<point x="271.02338" y="244.33127" />
+					<point x="268.39972" y="260.09943" />
+					<point x="266.92102" y="275.94122" />
+					<point x="264.75995" y="293.97195" />
+					<point x="262.73685" y="310.8515" />
+					<point x="261.19742" y="327.60406" />
+					<point x="258.22513" y="346.7257" />
+					<point x="255.95412" y="364.4342" />
+					<point x="252.24608" y="382.0046" />
+					<point x="248.9631" y="399.3469" />
+					<point x="245.64514" y="414.21222" />
+					<point x="243.67838" y="432.26547" />
+					<point x="242.13528" y="448.54242" />
+					<point x="240.26616" y="465.232" />
+					<point x="238.52316" y="483.7276" />
+					<point x="237.41187" y="499.6013" />
+					<point x="236.08272" y="519.0641" />
+					<point x="235.07901" y="537.2748" />
+					<point x="234.78839" y="556.4783" />
+					<point x="234.76181" y="573.7405" />
+					<point x="235.01787" y="592.9496" />
+					<point x="235.94891" y="610.00867" />
+					<point x="238.90547" y="628.2242" />
+					<point x="242.40715" y="646.7771" />
+					<point x="246.38342" y="665.2348" />
+					<point x="249.0537" y="687.34656" />
+					<point x="251.26385" y="708.3732" />
+					<point x="252.14023" y="730.99664" />
+					<point x="253.60641" y="750.15125" />
+					<point x="255.61365" y="769.9556" />
+					<point x="255.73615" y="790.9458" />
+					<point x="255.4476" y="810.92236" />
+					<point x="254.97784" y="827.55597" />
+					<point x="253.0383" y="846.98267" />
+					<point x="251.52155" y="867.11926" />
+					<point x="249.84842" y="886.10986" />
+					<point x="246.91794" y="908.0486" />
+					<point x="246.57663" y="923.31085" />
+					<point x="247.66199" y="935.0513" />
+					</polyline>
+				</geometry>
+			<root id="99e21a49-68c3-4025-911f-8f832848bba4" label="lat_3" po:accession="PO:0020121">
+				<geometry>
+					<polyline>
+					<point x="221.44272" y="484.149" />
+					<point x="203.9574" y="498.68665" />
+					<point x="187.65617" y="512.5482" />
+					<point x="178.80528" y="522.3722" />
+					<point x="166.86734" y="537.44165" />
+					<point x="157.66322" y="550.14856" />
+					<point x="148.05481" y="565.0364" />
+					<point x="141.57309" y="578.38654" />
+					<point x="133.80609" y="594.9324" />
+					<point x="127.787674" y="610.9271" />
+					<point x="123.26932" y="625.7465" />
+					<point x="118.56073" y="641.9872" />
+					<point x="116.57102" y="656.94073" />
+					<point x="113.44062" y="666.3502" />
+					<point x="110.330414" y="676.2097" />
+					<point x="109.2265" y="682.9163" />
+					</polyline>
+				</geometry>
+            </root>
+			<root id="6d099832-6d2f-4a5e-8bad-276187326612" label="lat_2" po:accession="PO:0020121">
+				<geometry>
+					<polyline>
+					<point x="279.40112" y="236.25394" />
+					<point x="296.59387" y="242.05922" />
+					<point x="313.4242" y="254.41711" />
+					<point x="327.02045" y="273.95416" />
+					<point x="334.41904" y="289.77496" />
+					<point x="341.90448" y="305.76154" />
+					<point x="349.09207" y="325.1667" />
+					<point x="355.29013" y="343.96832" />
+					<point x="361.12778" y="360.91653" />
+					<point x="366.84802" y="378.8504" />
+					<point x="370.67548" y="395.68378" />
+					<point x="374.20016" y="412.38922" />
+					<point x="381.10538" y="432.37296" />
+					<point x="384.8197" y="449.755" />
+					<point x="387.3573" y="466.78714" />
+					</polyline>
+				</geometry>
+			<root id="140d3219-324c-4476-9389-8acd38da5d6f" label="sub_lat_2" po:accession="PO:0020121">
+				<geometry>
+					<polyline>
+					<point x="349.62885" y="292.49164" />
+					<point x="364.8863" y="289.33047" />
+					<point x="382.86523" y="288.55865" />
+					<point x="401.0492" y="289.21344" />
+					<point x="414.88327" y="292.34064" />
+					<point x="435.5" y="298.0199" />
+					<point x="449.10135" y="304.12592" />
+					<point x="461.37735" y="312.60187" />
+					<point x="468.97464" y="321.74615" />
+					</polyline>
+				</geometry>
+ </root>
+ </root>
+			<root id="f46bd208-f76b-44ec-815c-5416dc99d51b" label="lat_1" po:accession="PO:0020121">
+				<geometry>
+					<polyline>
+					<point x="258.75635" y="167.05615" />
+					<point x="248.98703" y="174.7092" />
+					<point x="238.34273" y="182.73749" />
+					<point x="226.38275" y="191.75398" />
+					<point x="219.03964" y="200.39566" />
+					<point x="209.29837" y="211.3136" />
+					<point x="195.82379" y="226.16418" />
+					<point x="185.68211" y="238.0771" />
+					<point x="175.26675" y="249.54897" />
+					<point x="168.91121" y="259.85648" />
+					<point x="158.0433" y="278.90228" />
+					<point x="148.0513" y="297.30695" />
+					<point x="140.90167" y="309.95514" />
+					<point x="134.95921" y="323.49847" />
+					<point x="129.94354" y="333.5255" />
+					</polyline>
+				</geometry>
+ </root>
+ </root>
+		</plant>
+	</scene>
+</rsml>

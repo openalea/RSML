@@ -37,7 +37,7 @@ def discrete_to_continuous(g, position='position'):
     from rsml.metadata import add_property_definition
     
     # accessor of the segment position property
-    if isinstance(position, basestring):
+    if isinstance(position, str):
         g_pos = g.property(position)
         position = lambda g,vid: g_pos[vid]
     
@@ -77,7 +77,7 @@ def discrete_to_continuous(g, position='position'):
         g.remove_tree(node0)
 
     # set parent-node property
-    for axe,p_node in axe_branch.iteritems():
+    for axe,p_node in axe_branch.items():
         parent_node[axe] = geom_index[p_node]
 
     add_property_definition(g,label='parent-node', type=int)
@@ -104,7 +104,7 @@ def continuous_to_discrete(g):
 
         # create 1st segment
         position = geometry[axe]
-        if parent_node.has_key(axe):
+        if axe in parent_node:
             p_seg = axe_segments[(p_axe,parent_node[axe])]
             seg   = g.add_component(axe, edge_type='/', position=position[1])
             g.add_child(p_seg,seg, edge_type='+')
@@ -128,8 +128,8 @@ def continuous_to_discrete(g):
 def toporder(g, scale):
     """ Return the list of `g` vertices at scale `scale` in topological order """
     axes = []
-    map(axes.extend,(traversal.pre_order2(g,vid) 
+    list(map(axes.extend,(traversal.pre_order2(g,vid) 
                           for vid in g.vertices(scale=scale) 
-                          if not g.parent(vid)))
+                          if not g.parent(vid))))
     return axes
     

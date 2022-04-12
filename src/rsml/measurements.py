@@ -127,7 +127,7 @@ class RSML_Measurements(list):
         default = ' '*len(keys)
         
         # convert table entries to a list of string, then table rows to string
-        csv = [map(str,map(row.get,keys,default)) for row in self]
+        csv = [list(map(str,list(map(row.get,keys,default)))) for row in self]
         csv = [sep.join(row)+'\n' for row in csv]
         
         # export to given filename
@@ -147,8 +147,8 @@ class RSML_Measurements(list):
                 
         with open(filename) as f:
             content = reader(f,delimiter=sep)
-            keys = content.next()
+            keys = next(content)
             for row in content:
-                self.append(dict(zip(keys,map(try_eval,row))))
+                self.append(dict(list(zip(keys,list(map(try_eval,row))))))
                 
         

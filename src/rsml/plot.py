@@ -41,20 +41,20 @@ def plot3d(g, color=None, img_dir='.'):
             diameters = diams[vid]
             if isinstance(diameters, (list, tuple)):
                 _geom = pgl.Extrusion(
-                    pgl.Polyline(map(pgl.Vector3, geoms[vid])), 
+                    pgl.Polyline(list(map(pgl.Vector3, geoms[vid]))), 
                     section, 
-                    pgl.Point2Array(zip(diams[vid], diams[vid]))
+                    pgl.Point2Array(list(zip(diams[vid], diams[vid])))
                 )
             else:
                 _geom = pgl.Extrusion(
-                    pgl.Polyline(map(pgl.Vector3, geoms[vid])), 
+                    pgl.Polyline(list(map(pgl.Vector3, geoms[vid]))), 
                     section,
                     pgl.Point2Array([(diameters, diameters) for i in range(len(geoms))])
                 )
 
         else:
             _geom = pgl.Extrusion(
-                pgl.Polyline(map(pgl.Vector3, geoms[vid])), 
+                pgl.Polyline(list(map(pgl.Vector3, geoms[vid]))), 
                 section)
 
         return pgl.Shape(_geom, _color)
@@ -84,7 +84,7 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
     from matplotlib import pyplot as plt
 
     if img_file is not None:
-        if isinstance(img_file, basestring):
+        if isinstance(img_file, str):
             image = plt.imread(img_file)
         else:
             image = img_file
@@ -102,7 +102,7 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
     polylines = g.property('geometry')
 
     if root_id is None:
-        vertices = polylines.keys()
+        vertices = list(polylines.keys())
     elif isinstance(root_id, Iterable):
         vertices = [v for r in root_id
                     for vr in g.component_roots_at_scale(r, scale=root_scale) 

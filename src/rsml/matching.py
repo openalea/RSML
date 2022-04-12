@@ -32,8 +32,8 @@ def match_plants(t1,t2, max_distance=None):
         geometry = t.property('geometry')
         for plant in plants:
             axes = t.component_roots(plant)
-            apos = zip(*[geometry[axe][0] for axe in axes])
-            spos = map(div, map(sum,apos), map(len,apos))
+            apos = list(zip(*[geometry[axe][0] for axe in axes]))
+            spos = list(map(div, list(map(sum,apos)), list(map(len,apos))))
             seed_pos[plant] = spos
         
         return seed_pos
@@ -43,11 +43,11 @@ def match_plants(t1,t2, max_distance=None):
     
     # make distance matrix
     # --------------------
-    I1 = seed1.keys()
-    I2 = seed2.keys()
+    I1 = list(seed1.keys())
+    I2 = list(seed2.keys())
     
-    X1 = _np.array(seed1.values())[:,None,:]  # (n1, 1,k-dim)
-    X2 = _np.array(seed2.values())[None,:,:]  # ( 1,n2,k-dim)
+    X1 = _np.array(list(seed1.values()))[:,None,:]  # (n1, 1,k-dim)
+    X2 = _np.array(list(seed2.values()))[None,:,:]  # ( 1,n2,k-dim)
     
     D = ((X1-X2)**2).sum(axis=-1)**.5         # (n1,n2)
 
@@ -173,7 +173,7 @@ def one_to_one_match(distance, max_distance=None):
     distance = distance.ravel()
     order = distance.argsort()
     
-    ij = zip(*_np.unravel_index(order,(ni,nj)))
+    ij = list(zip(*_np.unravel_index(order,(ni,nj))))
     d  = distance[order].tolist()
     
     if max_distance is None: max_distance=d[-1]
@@ -188,7 +188,7 @@ def one_to_one_match(distance, max_distance=None):
         mi.add(i)
         mj.add(j)
         
-    unmatched_i = mi.symmetric_difference(range(ni))
-    unmatched_j = mj.symmetric_difference(range(nj))
+    unmatched_i = mi.symmetric_difference(list(range(ni)))
+    unmatched_j = mj.symmetric_difference(list(range(nj)))
     
     return match, unmatched_i, unmatched_j

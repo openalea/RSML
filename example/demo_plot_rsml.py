@@ -12,7 +12,7 @@ import os
 # load rsml
 rsml_dir = shared_data(rsml.__path__)#,'AR570/2012_11_25_09h00_chl110_1_1.rsml')
 rsml_files = sorted(glob(rsml_dir/"AR570/*.rsml"))
-
+# rsml_file = "/home/fabrice/Documents/RSML/example/data/arabidopsis-simple.rsml"
 def plot(x,y, label):
     l = plt.plot(x,y, '+')[0]
     
@@ -41,7 +41,7 @@ def plot_from_file(rsml_file, ax, split_plant, label=""):
 
     # extract properties & measurments for all roots
     root = measurements.root_order(g)               # ids of lateral roots
-    root = [r for r,o in root.iteritems() if o==2]
+    root = [r for r,o in root.items() if o==2]
     length = measurements.root_length(g,root)       # length of roots
     ppos = measurements.parent_position(g,roots=root,distance2tip=True)  # branching position on parent                
     plant = dict((r,g.complex(r)) for r in root)    # plant id of all roots
@@ -49,7 +49,7 @@ def plot_from_file(rsml_file, ax, split_plant, label=""):
     if split_plant:
         # plot root length w.r.t parent_position, for each plant
         for i,pid in enumerate(sorted(set(plant.values()))):
-            rids = [r for r,p in plant.iteritems() if p==pid]
+            rids = [r for r,p in plant.items() if p==pid]
             x = np.array([ppos[r]   for r in rids])
             y = np.array([length[r] for r in rids])
             plot(x,y,"plant %d"%(i+1))
