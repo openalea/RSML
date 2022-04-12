@@ -3,12 +3,12 @@ Test discrete mtg -> continuous -> rsml, and backward
 """
 
 def test_load_discrete():
-    import cPickle
+    import pickle  # F. Bauget 2022-04-12: no cPickle module in py3
     from openalea.deploy.shared_data import shared_data
     import rsml
     filename = shared_data(rsml)/'discrete.bmtg'
-    with open(filename) as f:
-        g = cPickle.load(f)
+    with open(filename, 'rb') as f:   # F. Bauget 2022-04-12: needs bytes
+        g = pickle.load(f, encoding="latin1") # F. Bauget 2022-04-12: Python 2 bytestring data to Python 3
     return g
     
 def simple_tree():
