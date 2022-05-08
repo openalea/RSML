@@ -25,6 +25,7 @@ requirements:
 test:
   requires:
     - pytest 
+    - openalea.deploy
   imports:
     - rsml
   source_files:
