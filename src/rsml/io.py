@@ -60,7 +60,7 @@ class Parser(object):
         """ Call the suitable function to process `elt` w.r.t to `elt.tag` """
         try:
             tag = elt.tag.replace('-','_')
-            return self.__getattribute__(tag)(elt.getchildren(), **elt.attrib)
+            return self.__getattribute__(tag)(list(elt), **elt.attrib)
         except Exception as e:
             if self.debug:
                 print(e)
@@ -294,7 +294,7 @@ def str2datetime(str_time):
 
 def read_xml_tree(elt):
     """ return xml tree `elt` """
-    children = elt.getchildren()
+    children = list(elt) # getchildren() is removed in Py 3.9
     if len(children):
         children_dict = {}
         for child in children:
