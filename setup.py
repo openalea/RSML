@@ -6,7 +6,7 @@ import sys
 from setuptools import setup, find_packages
 
 # Define metainfo
-version = '1.1.1'
+version = '1.1.2'
 name = 'RSML'
 package = 'RSML'
 description= 'RSML package provide IO functionality between .rsml file and MTG'
