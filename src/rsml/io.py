@@ -211,12 +211,13 @@ class Parser(object):
         poly = self._polyline
         point = []
         if properties:
-            coords = ['x', 'y', 'z']
+            coords = ['x', 'y', 'z', 't']
+            coords.extend(['coord_x', 'coord_y', 'coord_z', 'coord_t'])
             point = [float(properties[c]) for c in coords if c in properties]
         else:
             point = [float(elt.text) for elt in elts]
         poly.append(point)
-
+        print('point', point)
         self._node.geometry = poly
 
     def functions(self, elts, **properties):
