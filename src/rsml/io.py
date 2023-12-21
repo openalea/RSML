@@ -216,21 +216,47 @@ class Parser(object):
     def polyline(self, elts, **properties):
         """ A root axis - geometry - polyline """
         self._polyline = []  # will store all points in `elts`
+        self._time = []
+        self._time_hours = []
         for elt in elts:
             self.dispatch(elt)
+
+        if self._polyline: 
+            self._node.geometry = self._polyline
+            self._polyline = None
+        if self._time :
+            self._node.time = self._time
+            self._time = None
+        if self._time_hours :
+            self._node.time_hours = self._time_hours
+            self._time_hours = None
+
 
     def point(self, elts, **properties):
         poly = self._polyline
         point = []
+        times = self._time
+        times_hours = self._time_hours
         if properties:
-            coords = ['x', 'y', 'z', 't']
-            coords.extend(['coord_x', 'coord_y', 'coord_z', 'coord_t'])
-            point = [float(properties[c]) for c in coords if c in properties]
+            if 'x' in properties or 'coord_x' in properties:
+                coords = ['x', 'y', 'z']
+                coords.extend(['coord_x', 'coord_y', 'coord_z'])
+                point = [float(properties[c]) for c in coords if c in properties]
+            if 't' in properties or 'coord_t' in properties:
+                coords = ['t', 'coord_t']
+                time = [float(properties[c]) for c in coords if c in properties]
+                times.append(time[0])
+            if 'th' in properties or 'coord_th' in properties:
+                coords = ['th', 'coord_th']
+                time_hours = [float(properties[c]) for c in coords if c in properties]
+                times_hours.append(time_hours[0])
         else:
             point = [float(elt.text) for elt in elts]
         poly.append(point)
+        
         #print('point', point)
-        self._node.geometry = poly
+        
+
 
     def functions(self, elts, **properties):
         """ A root axis with geometry, functions, properties.
