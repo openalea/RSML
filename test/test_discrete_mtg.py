@@ -1,9 +1,9 @@
 """
 Test discrete mtg -> continuous -> rsml, and backward
 """
+import pickle 
 
-def test_load_discrete():
-    import pickle  # F. Bauget 2022-04-12: no cPickle module in py3
+def load_discrete():
     from openalea.deploy.shared_data import shared_data
     import rsml
     filename = shared_data(rsml)/'discrete.bmtg'
@@ -48,7 +48,7 @@ def test_discrete_to_continuous():
         assert len(g0.vertices(scale=3))==len(gd.vertices(scale=3)), 'not the same number of segment'
     
     test_tree(simple_tree())           # test simple tree
-    test_tree(test_load_discrete())    # test complex tree
+    test_tree(load_discrete())    # test complex tree
     
     
 ##def test_discrete_to_rsml():
