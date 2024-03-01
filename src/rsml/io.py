@@ -83,13 +83,13 @@ class Parser(object):
 
     def metadata(self, elts, **properties):
         """ Parse image information """
-        print('metadata')
+        #print('metadata')
         meta  = self._metadata = dict()
         gprop = self._g.graph_properties()
-        print([elt.tag for elt in elts])
+        #print([elt.tag for elt in elts])
         for elt in elts:
             elt_tag = elt.tag
-            print(elt_tag)
+            #print(elt_tag)
             if elt_tag=='last-modified': 
                 meta[elt_tag] = str2datetime(elt.text)
             elif elt_tag in ['version','resolution']:
@@ -97,7 +97,7 @@ class Parser(object):
             elif elt_tag in ['user','file-key','software','unit']:
                 meta[elt_tag] = elt.text
             elif elt_tag in ["property-definitions","time-sequence","image",'private']:
-                print(elt_tag)
+                #print(elt_tag)
                 self.dispatch(elt)
             elif elt_tag=='mtg_graph_properties':
                 gprop.update(read_xml_tree(elt))
@@ -110,7 +110,7 @@ class Parser(object):
         """ A plant with parameters and a recursive structure.
 
         """
-        print('property-definitions')
+        #print('property-definitions')
         self._propdef = {}
         for elt in elts:
             self.dispatch(elt)
@@ -422,7 +422,7 @@ class Dumper(object):
                 
         self.image(gmetadata)
         self.property_definitions(gmetadata)
-        print('TODO: time-sequence')
+        # print('TODO: time-sequence')
         
     def image(self,metadata):
         """ dump image element of metadata """
@@ -436,12 +436,12 @@ class Dumper(object):
     def property_definitions(self, metadata):
         """ dump property definitions of metadata """
 
-        print('property definitions')
+        #print('property definitions')
         gproperties = metadata.get('property-definitions')
         if gproperties is None: 
             return
         
-        print('property definitions : inside')
+        #print('property definitions : inside')
         pdefs = self.SubElement(self.xml_meta, 'property-definitions')
         for label,prop in gproperties.items():
             pdef = self.SubElement(pdefs, tag='property-definition')

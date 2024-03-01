@@ -116,7 +116,7 @@ def write_xls(xls_file, obs, primaries, secondaries):
 
     dfp = pd.DataFrame(data, index = index)
 
-    print(dfp)
+    #print(dfp)
     
     dfs= []
 
@@ -144,7 +144,7 @@ def write_xls(xls_file, obs, primaries, secondaries):
         df = pd.DataFrame(data, index = index)
         dfs.append(df)
 
-    print(dfp)
+    #print(dfp)
 
     if xls_file:
         with pd.ExcelWriter(xls_file, engine="xlsxwriter") as writer:  
