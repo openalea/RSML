@@ -21,6 +21,10 @@ requirements:
     - python >=3.6
     - openalea.mtg
     - matplotlib
+    - pandas
+    - xlsxwriter
+    - path
+    - numpy
 
 test:
   requires:
