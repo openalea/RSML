@@ -58,14 +58,14 @@ class Parser(object):
 
     def dispatch(self, elt):
         """ Call the suitable function to process `elt` w.r.t to `elt.tag` """
-        try:
-            tag = elt.tag.replace('-','_')
-            return self.__getattribute__(tag)(list(elt), **elt.attrib)
-        except Exception as e:
-            if self.debug:
-                print(e)
-                #raise Exception("Unvalid element %s"%elt.tag)
-                print("Unvalid element %s"%elt.tag)
+        #try:
+        tag = elt.tag.replace('-','_')
+        return self.__getattribute__(tag)(list(elt), **elt.attrib)
+        #except Exception as e:
+        #    if self.debug:
+        #        print(e)
+        #        #raise Exception("Unvalid element %s"%elt.tag)
+        #        print("Unvalid element %s"%elt.tag)
 
     @staticmethod
     def add_field(elt, my_dict) :
@@ -83,18 +83,21 @@ class Parser(object):
 
     def metadata(self, elts, **properties):
         """ Parse image information """
-
+        #print('metadata')
         meta  = self._metadata = dict()
         gprop = self._g.graph_properties()
+        #print([elt.tag for elt in elts])
         for elt in elts:
             elt_tag = elt.tag
+            #print(elt_tag)
             if elt_tag=='last-modified': 
                 meta[elt_tag] = str2datetime(elt.text)
             elif elt_tag in ['version','resolution']:
                 meta[elt_tag] = literal_eval(elt.text)
             elif elt_tag in ['user','file-key','software','unit']:
                 meta[elt_tag] = elt.text
-            elif elt.tag in ["property-definitions","time-sequence","image",'private']:
+            elif elt_tag in ["property-definitions","time-sequence","image",'private']:
+                #print(elt_tag)
                 self.dispatch(elt)
             elif elt_tag=='mtg_graph_properties':
                 gprop.update(read_xml_tree(elt))
@@ -107,6 +110,7 @@ class Parser(object):
         """ A plant with parameters and a recursive structure.
 
         """
+        #print('property-definitions')
         self._propdef = {}
         for elt in elts:
             self.dispatch(elt)
@@ -122,6 +126,14 @@ class Parser(object):
         if label:
             self._propdef[label]=prop
 
+    def function_definition(self, elts, **properties):
+        """ A plant with parameters and a recursive structure """
+        prop = dict()
+        for elt in elts:
+            self.add_field(elt,prop)
+        label = prop.pop('label')
+        if label:
+            self._propdef[label]=prop
 
     def time_sequence(self, elts, **properties):
         """ A plant with parameters and a recursive structure.
@@ -168,8 +180,8 @@ class Parser(object):
         else:
             axis = parent.add_child(edge_type='+',**attrib)      # 2nd+ order
             
-        if 'label' not in attrib:
-            axis.label = 'root'
+        if ('label' not in attrib) or not(attrib['label']):
+            axis.label = 'Root'
 
         self._node = axis
 
@@ -204,20 +216,47 @@ class Parser(object):
     def polyline(self, elts, **properties):
         """ A root axis - geometry - polyline """
         self._polyline = []  # will store all points in `elts`
+        self._time = []
+        self._time_hours = []
         for elt in elts:
             self.dispatch(elt)
+
+        if self._polyline: 
+            self._node.geometry = self._polyline
+            self._polyline = None
+        if self._time :
+            self._node.time = self._time
+            self._time = None
+        if self._time_hours :
+            self._node.time_hours = self._time_hours
+            self._time_hours = None
+
 
     def point(self, elts, **properties):
         poly = self._polyline
         point = []
+        times = self._time
+        times_hours = self._time_hours
         if properties:
-            coords = ['x', 'y', 'z']
-            point = [float(properties[c]) for c in coords if c in properties]
+            if 'x' in properties or 'coord_x' in properties:
+                coords = ['x', 'y', 'z']
+                coords.extend(['coord_x', 'coord_y', 'coord_z'])
+                point = [float(properties[c]) for c in coords if c in properties]
+            if 't' in properties or 'coord_t' in properties:
+                coords = ['t', 'coord_t']
+                time = [float(properties[c]) for c in coords if c in properties]
+                times.append(time[0])
+            if 'th' in properties or 'coord_th' in properties:
+                coords = ['th', 'coord_th']
+                time_hours = [float(properties[c]) for c in coords if c in properties]
+                times_hours.append(time_hours[0])
         else:
             point = [float(elt.text) for elt in elts]
         poly.append(point)
+        
+        #print('point', point)
+        
 
-        self._node.geometry = poly
 
     def functions(self, elts, **properties):
         """ A root axis with geometry, functions, properties.
@@ -243,14 +282,19 @@ class Parser(object):
 
     def sample(self, elt, domain):
         p = elt.attrib
-        value = float(p['value'])
+        
+        if p:
+            value = float(p['value'])
 
-        if domain == "length":
-            position= float(p['position'])
-            return (position, value)
+            if domain == "length":
+                position= float(p['position'])
+                return (position, value)
+            else:
+                return value
         else:
+            value = float(elt.text)
             return value
-
+    
     def annotations(self, elts, **properties):
         """ Annotations attached to a part of the MTG.
         """
@@ -288,9 +332,21 @@ class Annotation(object):
 def str2datetime(str_time):
     """ convert datetime string to datetime object """
     from datetime import datetime as dt
-    if len(str_time)==10: time_format = '%Y-%m-%d'
-    else:                 time_format = '%Y-%m-%dT%H:%M:%S'
-    return dt.strptime(str_time[:19], time_format)
+    if len(str_time)==10: 
+        time_format = '%Y-%m-%d'
+        time_format2 = '%d-%m-%Y'
+    else:                 
+        time_format = '%Y-%m-%d %H:%M:%S'
+        time_format2 = '%d-%m-%Y %H:%M:%S'
+
+    try:
+        date = dt.strptime(str_time[:19], time_format)
+    except:
+        try:
+            date = dt.strptime(str_time[:19], time_format2)
+        except:
+            date=str_time
+    return date
 
 def read_xml_tree(elt):
     """ return xml tree `elt` """
@@ -366,7 +422,7 @@ class Dumper(object):
                 
         self.image(gmetadata)
         self.property_definitions(gmetadata)
-        print('TODO: time-sequence')
+        # print('TODO: time-sequence')
         
     def image(self,metadata):
         """ dump image element of metadata """
@@ -379,10 +435,13 @@ class Dumper(object):
                 
     def property_definitions(self, metadata):
         """ dump property definitions of metadata """
+
+        #print('property definitions')
         gproperties = metadata.get('property-definitions')
         if gproperties is None: 
             return
         
+        #print('property definitions : inside')
         pdefs = self.SubElement(self.xml_meta, 'property-definitions')
         for label,prop in gproperties.items():
             pdef = self.SubElement(pdefs, tag='property-definition')
@@ -391,7 +450,14 @@ class Dumper(object):
             tags = [tag for tag in ['type','unit','default'] if tag in tags]
             for tag in tags:
                 self.SubElement(pdef, tag=tag, text=str(prop[tag]))
-        
+
+            pdef = self.SubElement(pdefs, tag='function-definition')
+            self.SubElement(pdef, tag='label', text=str(label))
+            tags = list(prop.keys())
+            tags = [tag for tag in ['type','unit','default'] if tag in tags]
+            for tag in tags:
+                self.SubElement(pdef, tag=tag, text=str(prop[tag]))
+
 
     def scene(self):
         g = self._g

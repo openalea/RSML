@@ -6,13 +6,13 @@ import sys
 from setuptools import setup, find_packages
 
 # Define metainfo
-version = '1.1.2'
+version = '1.2.0'
 name = 'RSML'
 package = 'RSML'
 description= 'RSML package provide IO functionality between .rsml file and MTG'
 long_description=  'RSML package provide IO functionality between .rsml file and MTG, as well as ploting and standard measurements.' 
 authors= 'C. Pradal, J. Diener'
-authors_email = 'christophe.pradal@inria.fr'
+authors_email = 'christophe.pradal at cirad.fr'
 url = 'https://github.com/openalea/RSML'
 license = 'Cecill-C'
 
@@ -60,5 +60,9 @@ setup(
     # Declare scripts and wralea as entry_points (extensions) of your package
     entry_points={
         'wralea': ['rsml = rsml_wralea'],
+        'console_scripts': [
+            'hirros = rsml.hirros:main'  # Define a console script to run your Voilà app
+        ]
+
     },
 )
