@@ -14,22 +14,29 @@ import rsml
 
 
 def walk(dir: str, recursive=True):
-    """
+    """ Traverse a set of directories and return rsml files.
+
+    Notes : rsml files are defined by 61_graph*.rsml
     """
     dir = Path(dir)
-    fns = None
+    fns = []
     for rsml_file in ['61_graph_expertized.rsml', '61_graph.rsml']:
-        fns = dir.glob(rsml_file)
-        if not fns and recursive:
-            fns = dir.glob('*/%s'%rsml_file)
-        if fns:
-            break
+        rsmls = dir.glob(rsml_file)
+        if rsmls : 
+            fns.extend(rsmls)
+        if recursive:
+            rsmls = dir.glob('*/%s'%rsml_file)
+            if rsmls : 
+                fns.extend(rsmls)
+
     if not fns:
         print("ERROR: no rsml files found")
     
     final_fns = []
     for fn in fns:
         if (fn.parent/'80_graph_analysis.xlsx').exists():
+            continue
+        elif (fn.parent/'80_graph_expertized_analysis.xlsx').exists():
             continue
         else:
             final_fns.append(fn)
@@ -152,11 +159,19 @@ def write_xls(xls_file, obs, primaries, secondaries):
                         sheet_name='Prim',
                         float_format="%.2f", 
                         header = False)
+            workbook  = writer.book
+            bold_format = workbook.add_format({'bold': True})
+
+            worksheet = writer.sheets['Prim']
+            worksheet.set_row(0, None, bold_format)
+
             for i, df in enumerate(dfs):
                 df.to_excel(writer, 
                             sheet_name='RP%d'%(i+1),
                             float_format="%.2f", 
                             header = False)
+                worksheet = writer.sheets['RP%d'%(i+1)]
+                worksheet.set_row(0, None, bold_format)
 
 
 def run(fn):
@@ -174,7 +189,10 @@ def run(fn):
         secondaries.append(s2)
 
     # Write in xlsx
-    xlsx_file = fn.parent/'80_graph_analysis.xlsx'
+    if 'expertized' in fn:
+        xlsx_file = fn.parent/'80_graph_expertized_analysis.xlsx'
+    else: 
+        xlsx_file = fn.parent/'80_graph_analysis.xlsx'
     write_xls(xlsx_file, 
               obs, primaries=prims, secondaries=secondaries)
 
@@ -208,7 +226,8 @@ def main():
     
     
 if __name__=='__main__':
-    g = read('set_de_5/230403VS004')
+    fns = walk('set_de_5/230403VS004')
+    g = read(fns[0])
     obs = times(g)
 
     plant_ids = g.vertices(scale=1)
