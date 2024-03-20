@@ -266,7 +266,7 @@ def main():
     if gxe_file:
         print('GxE file to process', gxe_file)
         dirs = []
-        with open('gxe.txt', 'r') as gxe:
+        with open(gxe_file, 'r') as gxe:
             dirs = [d.strip() for d in gxe]
             dirs = [d for d in dirs if Path(d).exists()]
 
