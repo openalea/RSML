@@ -107,8 +107,7 @@ def length_and_number(secondary):
     return total_length.tolist(), total_number.tolist()
 
 
-def write_xls(xls_file, obs, primaries, secondaries):
-
+def dataframes(obs, primaries, secondaries):
     data = [obs]
     index=['time(h)']
     for i, p in enumerate(primaries):
@@ -126,8 +125,6 @@ def write_xls(xls_file, obs, primaries, secondaries):
     #print(dfp)
     
     dfs= []
-
-    
 
     for sec in secondaries:
 
@@ -151,7 +148,10 @@ def write_xls(xls_file, obs, primaries, secondaries):
         df = pd.DataFrame(data, index = index)
         dfs.append(df)
 
-    #print(dfp)
+    return dfp, dfs
+
+def write_xls(xls_file, dfp, dfs):
+
 
     if xls_file:
         with pd.ExcelWriter(xls_file, engine="xlsxwriter") as writer:  
@@ -173,9 +173,39 @@ def write_xls(xls_file, obs, primaries, secondaries):
                 worksheet = writer.sheets['RP%d'%(i+1)]
                 worksheet.set_row(0, None, bold_format)
 
+def write_xls_all(xls_file, primaries, secondaries):
 
-def run(fn):
-    g = read(fn)
+    with pd.ExcelWriter(xls_file, engine="xlsxwriter") as writer:  
+        startrow = 0
+        for dfp in primaries:
+
+            dfp.to_excel(writer, 
+                        sheet_name='Prim',
+                        float_format="%.2f", 
+                        header = False,
+                        startrow=startrow)
+            workbook  = writer.book
+            bold_format = workbook.add_format({'bold': True})
+
+            worksheet = writer.sheets['Prim']
+            worksheet.set_row(startrow, None, bold_format)
+
+            startrow += len(dfp)+2
+
+        for i in secondaries: 
+            dfs = secondaries[i]
+            startrow = 0
+            for df in dfs:
+                df.to_excel(writer, 
+                            sheet_name='RP%d'%(i+1),
+                            float_format="%.2f", 
+                            header = False,
+                            startrow=startrow)
+                worksheet = writer.sheets['RP%d'%(i+1)]
+                worksheet.set_row(startrow, None, bold_format)
+                startrow += len(df)+2
+
+def process(g):
     obs = times(g)
 
     plant_ids = g.vertices(scale=1)
@@ -188,40 +218,79 @@ def run(fn):
         s2 = secondary(g, pid, obs)
         secondaries.append(s2)
 
+    df_primary, df_secondaries = dataframes(obs, prims, secondaries)
+    return df_primary, df_secondaries
+
+def run(fn):
+    g = read(fn)
+    dfp, dfs =  process(g)
+
     # Write in xlsx
     if 'expertized' in fn:
         xlsx_file = fn.parent/'80_graph_expertized_analysis.xlsx'
     else: 
         xlsx_file = fn.parent/'80_graph_analysis.xlsx'
-    write_xls(xlsx_file, 
-              obs, primaries=prims, secondaries=secondaries)
+    write_xls(xlsx_file, dfp, dfs)
 
     print('WRITE %s'%xlsx_file)
+
+def run_all(fns):
+
+    prims = []
+    secondaries = {}
+
+    for fn in fns:
+        g = read(fn)
+        dfp, dfs =  process(g)
+        prims.append(dfp)
+        for i, df in enumerate(dfs):
+            secondaries.setdefault(i, []).append(df)
+
+    write_xls_all('gxe_results.xlsx', prims, secondaries)
+    print('WRITE gxe_results.xlsx')
 
 def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', default='.', help='directory to process')
     parser.add_argument('-r', default=True, type=bool, help='traverse the directories recursively')
+    parser.add_argument('-f',  help='text file containing the list of directories to process')
     
     args = parser.parse_args()
 
     dir = args.d
     recursive = args.r
+    gxe_file = args.f
 
-    fns = walk(dir=dir, recursive=recursive)
-    if not fns:
-        return
-    
-    if len(fns) == 1:
-        fn = fns[0]
-        print('Process file %s'%(fns[0]))
-        run(fn)
+    fns = []
+    if gxe_file:
+        print('GxE file to process', gxe_file)
+        dirs = []
+        with open('gxe.txt', 'r') as gxe:
+            dirs = [d.strip() for d in gxe]
+            dirs = [d for d in dirs if Path(d).exists()]
 
+        for d in dirs: 
+            rsml_files = walk(dir=d, recursive=recursive)
+            fns.extend(rsml_files)
+
+        print('Process files %s'%(' '.join(fns)))
+        run_all(fns)
     else:
-        for fn in fns:
+        fns = walk(dir=dir, recursive=recursive)
+    
+        if not fns:
+            return
+        
+        if len(fns) == 1:
+            fn = fns[0]
             print('Process file %s'%(fns[0]))
             run(fn)
+
+        else:
+            for fn in fns:
+                print('Process file %s'%(fns[0]))
+                run(fn)
 
     
     
