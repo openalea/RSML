@@ -13,7 +13,7 @@ import pandas as pd
 import rsml
 
 
-def walk(dir: str, recursive=True):
+def walk(dir: str, recursive=True, force=False):
     """ Traverse a set of directories and return rsml files.
 
     Notes : rsml files are defined by 61_graph*.rsml
@@ -21,6 +21,8 @@ def walk(dir: str, recursive=True):
     dir = Path(dir)
     fns = []
     for rsml_file in ['61_graph_expertized.rsml', '61_graph.rsml']:
+        if fns and force:
+            continue
         rsmls = dir.glob(rsml_file)
         if rsmls : 
             fns.extend(rsmls)
@@ -34,12 +36,13 @@ def walk(dir: str, recursive=True):
     
     final_fns = []
     for fn in fns:
-        if (fn.parent/'80_graph_analysis.xlsx').exists():
-            continue
-        elif (fn.parent/'80_graph_expertized_analysis.xlsx').exists():
-            continue
-        else:
-            final_fns.append(fn)
+        if not force:
+            if (fn.parent/'80_graph_analysis.xlsx').exists():
+                continue
+            elif (fn.parent/'80_graph_expertized_analysis.xlsx').exists():
+                continue
+        final_fns.append(fn)
+        
     return final_fns
     
 def read(fn):
@@ -271,7 +274,7 @@ def main():
             dirs = [d for d in dirs if Path(d).exists()]
 
         for d in dirs: 
-            rsml_files = walk(dir=d, recursive=recursive)
+            rsml_files = walk(dir=d, recursive=recursive, force=True)
             fns.extend(rsml_files)
 
         print('Process files %s'%(' '.join(fns)))
