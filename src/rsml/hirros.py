@@ -42,7 +42,7 @@ def walk(dir: str, recursive=True, force=False):
             elif (fn.parent/'80_graph_expertized_analysis.xlsx').exists():
                 continue
         final_fns.append(fn)
-        
+
     return final_fns
     
 def read(fn):
@@ -176,37 +176,41 @@ def write_xls(xls_file, dfp, dfs):
                 worksheet = writer.sheets['RP%d'%(i+1)]
                 worksheet.set_row(0, None, bold_format)
 
-def write_xls_all(xls_file, primaries, secondaries):
+def write_xls_all(xls_file, fns, primaries, secondaries):
 
+    
     with pd.ExcelWriter(xls_file, engine="xlsxwriter") as writer:  
         startrow = 0
-        for dfp in primaries:
+        for i, dfp in enumerate(primaries):
 
             dfp.to_excel(writer, 
                         sheet_name='Prim',
                         float_format="%.2f", 
                         header = False,
-                        startrow=startrow)
+                        startrow=startrow+1)
             workbook  = writer.book
             bold_format = workbook.add_format({'bold': True})
 
             worksheet = writer.sheets['Prim']
-            worksheet.set_row(startrow, None, bold_format)
+            worksheet.set_row(startrow+1, None, bold_format)
+            worksheet.write(startrow, 0, fns[i])
+            startrow += len(dfp)+3
 
-            startrow += len(dfp)+2
-
-        for i in secondaries: 
-            dfs = secondaries[i]
-            startrow = 0
-            for df in dfs:
+        startrow = 0
+        for i, dfs in enumerate(secondaries): 
+            name = fns[i]
+            for j, df in enumerate(dfs):
                 df.to_excel(writer, 
-                            sheet_name='RP%d'%(i+1),
+                            sheet_name='Lateral',
                             float_format="%.2f", 
                             header = False,
-                            startrow=startrow)
-                worksheet = writer.sheets['RP%d'%(i+1)]
-                worksheet.set_row(startrow, None, bold_format)
-                startrow += len(df)+2
+                            startrow=startrow+1)
+                worksheet = writer.sheets['Lateral']
+                worksheet.set_row(startrow+1, None, bold_format)
+                worksheet.write(startrow, 0, name)
+                worksheet.write(startrow, 1, 'Plant %d'%j)
+                
+                startrow += len(df)+3
 
 def process(g):
     obs = times(g)
@@ -240,16 +244,15 @@ def run(fn):
 def run_all(fns):
 
     prims = []
-    secondaries = {}
+    secondaries = []
 
     for fn in fns:
         g = read(fn)
         dfp, dfs =  process(g)
         prims.append(dfp)
-        for i, df in enumerate(dfs):
-            secondaries.setdefault(i, []).append(df)
+        secondaries.append(dfs)
 
-    write_xls_all('gxe_results.xlsx', prims, secondaries)
+    write_xls_all('gxe_results.xlsx', fns, prims, secondaries)
     print('WRITE gxe_results.xlsx')
 
 def main():
