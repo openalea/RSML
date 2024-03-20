@@ -208,7 +208,7 @@ def write_xls_all(xls_file, fns, primaries, secondaries):
                 worksheet = writer.sheets['Lateral']
                 worksheet.set_row(startrow+1, None, bold_format)
                 worksheet.write(startrow, 0, name)
-                worksheet.write(startrow, 1, 'Plant %d'%j)
+                worksheet.write(startrow, 1, 'Plant %d'%(j+1))
                 
                 startrow += len(df)+3
 
