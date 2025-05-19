@@ -9,7 +9,7 @@ import numpy as np
 import rsml
 from rsml.continuous import *
 from openalea.mtg import MTG, traversal
-from shared_functions import *
+
 
 def my_toporder(g, scale):
   # F. Bauget 2020-03-18 : testing RSML continuous from rsml2mtg()  to hydroroot disctrete copied from rsml.continuous

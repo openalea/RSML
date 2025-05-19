@@ -80,7 +80,7 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
           Format is matplotlib colors (e.g. 'b', 'g', 'y', 'r')
     """  
     import numpy as np  
-    from collections import Iterable
+    from collections.abc import Iterable
     from matplotlib import pyplot as plt
 
     if img_file is not None:
@@ -133,17 +133,26 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
         else:
             ax = plt.gca()
             ax.set_ylim(sorted(ax.get_ylim(), reverse=True))
-        ax.axis('equal')
+        ax.set_aspect('equal', adjustable='box')
+        # ax.axis('equal')
 
 
 def multiple_plot(files, image=True):
+    '''
+    horizontally plot several rsml architecture over images if image is True
+    :param files: str list of files path
+    :param image: if True plot rsml architecture over the image, else plot rsml only.
+    :return: plot of all files in the same figure.
+    '''
     from openalea.core.path import path
     from matplotlib import pyplot as plt
     import rsml
+    import os
 
     def get_file(f):    
         exts = ['.png', '.jpg', '.tif']
-        fn = f.splitext()[0]
+        # fn = f.splitext()[0] # pb with posixpath has no splitext neither string path
+        fn = os.path.splitext(f)[0]
         for ext in exts:
             _f = path(fn + ext)
             if _f.exists():
