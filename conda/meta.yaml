@@ -1,46 +1,48 @@
-{% set data = load_setup_py_data() %}
+{% set pyproject = load_file_data('../pyproject.toml', from_recipe_dir=True) %}
 
 package:
-  name: rsml
-  version: {{ data.get('version') }}
+  name: {{ pyproject["project"]["name"] }}
+  version: {{ GIT_DESCRIBE_TAG  | replace("v", "") }}
 
 source:
   path: ..
 
 build:
   noarch: python
-  preserve_egg_dir: True
   number: 0
-  script: {{PYTHON}} setup.py install #--single-version-externally-managed --record=record.txt
+  script: {{PYTHON}} -m pip install . -vv
 
 requirements:
   build:
-    - python  {{PY_VER}}
-    - openalea.deploy
+    - python {{ pyproject["project"]["requires-python"] }}
+    {% for dep in pyproject["build-system"]["requires"] %}
+    - {{ dep.lower() }}
+    {% endfor %}
+
   run:
-    - python >=3.6
-    - openalea.mtg
-    - matplotlib
-    - pandas
-    - xlsxwriter
-    - path
-    - numpy
+    - python {{ pyproject["project"]["requires-python"] }}
+    {% for dep in pyproject["project"]["dependencies"] %}
+    - {{ dep.lower() }}
+    {% endfor %}
+    {% for dep in pyproject["tool"]["conda"]["environment"]["dependencies"] %}
+    - {{ dep.lower() }}
+    {% endfor %}
 
 test:
   requires:
-    - pytest 
-    - openalea.deploy
+    - pytest
   imports:
     - rsml
   source_files:
     - share/data/**
     - test/**
+    - test/data/**
   commands:
     - cd test
     - pytest -v 
 
 about:
-  home: http://github.com/openalea/RSML
-  license: Cecill-c License
-  summary: RSML - The language of root architecture
+  summary: {{ pyproject["project"]["description"] }}
+  license: {{ pyproject["project"]["license"] }}
+  home: {{ pyproject["project"]["urls"]["Homepage"] }}
 
