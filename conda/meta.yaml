@@ -34,7 +34,7 @@ test:
   imports:
     - rsml
   source_files:
-    - share/data/**
+    - rsml/data/**
     - test/**
     - test/data/**
   commands:
