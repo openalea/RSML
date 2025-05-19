@@ -134,7 +134,6 @@ def plot2d(g, img_file=None, axis=None, root_id=None, color=None, order=None, cl
             ax = plt.gca()
             ax.set_ylim(sorted(ax.get_ylim(), reverse=True))
         ax.set_aspect('equal', adjustable='box')
-        # ax.axis('equal')
 
 
 def multiple_plot(files, image=True):
