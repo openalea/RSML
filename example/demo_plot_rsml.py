@@ -1,8 +1,8 @@
-from openalea.deploy.shared_data import shared_data
 
 import rsml
 from rsml import misc
 from rsml import measurements
+from rsml.data import data_dir as rsml_dir
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -10,7 +10,6 @@ from glob import glob
 import os
 
 # load rsml
-rsml_dir = shared_data(rsml.__path__)#,'AR570/2012_11_25_09h00_chl110_1_1.rsml')
 rsml_files = sorted(glob(rsml_dir/"AR570/*.rsml"))
 # rsml_file = "/home/fabrice/Documents/RSML/example/data/arabidopsis-simple.rsml"
 def plot(x,y, label):

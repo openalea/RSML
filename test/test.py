@@ -1,13 +1,12 @@
-from openalea.deploy import shared_data
 
 N = 2
 
 from time import sleep
-from openalea.deploy.shared_data import shared_data
+from rsml.data import data_dir
 import rsml
 
-img_dir = shared_data(rsml)
-data = shared_data(rsml)
+img_dir = data_dir
+data = data_dir
 
 files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 #print files
@@ -63,7 +62,7 @@ def f2():
 
 	# OK
 
-	data = shared_data(rsml)/'rsml'/'rootnav'
+	data = data_dir/'rsml'/'rootnav'
 
 	files = [fn for fn in data.glob('*.rsml') if 'old' not in fn]
 	fn= files[0]
