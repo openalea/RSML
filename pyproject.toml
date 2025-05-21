@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools",
+    "setuptools_scm",
+  ]
+build-backend = "setuptools.build_meta"
+
+# enable dynamic versioning based on git tags
+[tool.setuptools_scm]
+
+[project]
+name = "rsml"
+dynamic = ["version"]
+description = "RootSystemML (RSML) is a file format to represent root architectural data. This package is an openalea pckage to manage it, import/export between .rsml files and MTG, etc."
+readme = "README.md"
+authors = [
+    { name = "Christophe Pradal", email = "christophe.pradal@cirad.fr" }
+]
+license = "CECILL-C"
+license-files = ["LICEN[CS]E*"]
+keywords = ["OpenAlea", "RSML", "Plant Architecture"]
+requires-python = ">=3.9"
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+    "matplotlib",
+    "pandas",
+    "xlsxwriter",
+    "path",
+    "numpy",
+]
+
+[project.urls]
+Homepage = "http://github.com/openalea/rsml"
+"Bug Tracker" = "https://github.com/openalea/rsml/issues"
+Discussions = "https://github.com/openalea/rsml/discussions"
+
+[project.entry-points."wralea"]
+mtg = "rsml_wralea"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+doc = [
+  "sphinx-favicon",
+  "sphinx-rtd-theme",
+  "pydata-sphinx-theme",
+  "myst-parser",
+  "sphinx-favicon",
+  "nbsphinx",
+]
+
+# section specific to conda-only distributed package (not used by pip yet)
+# based on astk, used in hydroroot with a meta.yaml that only use metadata from
+# pyproject => only pyproject.toml must be modified
+[tool.conda.environment]
+channels = [
+  "openalea3",
+  "conda-forge"
+]
+dependencies = [
+    "openalea.mtg",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+

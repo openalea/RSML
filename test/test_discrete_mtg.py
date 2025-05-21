@@ -4,9 +4,9 @@ Test discrete mtg -> continuous -> rsml, and backward
 import pickle 
 
 def load_discrete():
-    from openalea.deploy.shared_data import shared_data
+    from rsml.data import data_dir
     import rsml
-    filename = shared_data(rsml)/'discrete.bmtg'
+    filename = data_dir/'discrete.bmtg'
     with open(filename, 'rb') as f:   # F. Bauget 2022-04-12: needs bytes
         g = pickle.load(f, encoding="latin1") # F. Bauget 2022-04-12: Python 2 bytestring data to Python 3
     return g
