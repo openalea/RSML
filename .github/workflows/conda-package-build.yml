@@ -10,14 +10,11 @@ on:
     branches:
       - '**'
 
-
 jobs:
   build:
-    uses: openalea/github-action-conda-build/.github/workflows/conda-package-build.yml@label
-    with:
-      operating-system: '["ubuntu-latest"]'
-      build-options: ""
-      label: latest
-      python-minor-version: '[10]'
+    uses: openalea/github-action-conda-build/.github/workflows/conda-package-build.yml@main
     secrets:
       anaconda_token: ${{ secrets.ANACONDA_TOKEN }}
+    with:
+      python-minor-version: [ 10 ]
+      label: latest
