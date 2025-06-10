@@ -255,6 +255,16 @@ def run_all(fns):
     write_xls_all('gxe_results.xlsx', fns, prims, secondaries)
     print('WRITE gxe_results.xlsx')
 
+def merge_and_compute_primaries(dataframes):
+    """Mean of Mean
+    or mean of total Length and total number"""
+    pass
+
+def merge_and_compute_secondaries(dataframes):
+    """Mean of Mean
+    or mean of total Length and total number"""
+    pass
+
 def main():
 
     parser = argparse.ArgumentParser()
