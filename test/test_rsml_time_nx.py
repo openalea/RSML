@@ -1,7 +1,8 @@
 import rsml
 from rsml import data
 
-from openalea.mtg import traversal
+from openalea.mtg import traversal, algo
+
 import networkx as nx
 import numpy as np
 
@@ -22,7 +23,8 @@ def distance_polyline(p1, p2):
     closest_point = p1[closest_index]
     # Distance to the closest point
     distance = np.linalg.norm(closest_point - point_p2)
-    #print("Distance to the closest point ", distance)
+    if distance > 5:
+        print("Distance to the closest point ", distance)
 
     return closest_index 
 
@@ -37,6 +39,7 @@ def convert_fine_mtg(fn):
     geometry = g.property('geometry')
     time = g.property('time')
     time_hours = g.property('time_hours')
+    diameters = g.property('diameters')
 
     indexes = {}
 
@@ -44,12 +47,11 @@ def convert_fine_mtg(fn):
     for pid in plants:
         aid =  next(g.component_roots_iter(pid))
         for axis_id in traversal.pre_order2(g, vtx_id=aid):
-            print(axis_id)
             poly = geometry[axis_id]
             time_v = time[axis_id]
             time_hours_v = time_hours[axis_id]
+            #diams = diameters[axis_id]
 
-            count = 0
             if g.parent(axis_id) is None:
                 # create the axis at segment level
                 vid = g2.add_component(complex_id=axis_id, label='Segment', 
@@ -88,14 +90,48 @@ def convert_fine_mtg(fn):
                 indexes[axis_id].append(vid)
     return g2
 
+def split(g):
+    return algo.split(g)
 
-            
+def convert_nx(g):
 
+    max_scale = g.max_scale()
+    root_id = next(g.component_roots_at_scale_iter(g.root, scale=max_scale))
+
+    edge_list = []
+    nodes = list(traversal.pre_order2(g, vtx_id=root_id))
+    for v in nodes:
+        parent = g.parent(v)
+        if parent is None:
+            continue
+
+        edge_list.append((parent, v))
+
+    g_nx = nx.from_edgelist(edge_list, create_using=nx.DiGraph)
+
+    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label']
+    for node in nodes:
+        for prop in props:
+            _prop = g.property(prop)
+            if node in _prop:
+                g_nx.nodes[node][prop] = _prop.get(node)
+
+    return g_nx
 
                 
                 
+def test_all():
+    """
+    Test the conversion of the MTG to a fine MTG and then to a networkx graph.
+    """
+    g = convert_fine_mtg(fn)
 
-                
+    gs = split(g)
+    dgs = [convert_nx(g) for g in gs]
+    return dgs
+
+
+
 
                 
 
