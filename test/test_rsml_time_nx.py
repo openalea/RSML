@@ -39,7 +39,7 @@ def convert_fine_mtg(fn):
     geometry = g.property('geometry')
     time = g.property('time')
     time_hours = g.property('time_hours')
-    diameters = g.property('diameters')
+    diameters = g.property('diameter')
 
     indexes = {}
 
@@ -50,14 +50,15 @@ def convert_fine_mtg(fn):
             poly = geometry[axis_id]
             time_v = time[axis_id]
             time_hours_v = time_hours[axis_id]
-            #diams = diameters[axis_id]
+            diams = diameters[axis_id]
 
             if g.parent(axis_id) is None:
                 # create the axis at segment level
                 vid = g2.add_component(complex_id=axis_id, label='Segment', 
                                       x=poly[0][0], y=poly[0][1], 
                                       time=time_v[0], 
-                                      time_hours=time_hours_v[0])
+                                      time_hours=time_hours_v[0],
+                                      diameter= diams[0])
                 indexes[axis_id] = [vid]
             else:
                 # find the closest point in the parent axis
@@ -74,7 +75,8 @@ def convert_fine_mtg(fn):
                             label='Segment', 
                             x=poly[0][0], y=poly[0][1], 
                             time=time_v[0], 
-                            time_hours=time_hours_v[0]
+                            time_hours=time_hours_v[0],
+                            diameter= diams[0],
                             )
                 indexes[axis_id] = [vid]
 
@@ -86,7 +88,9 @@ def convert_fine_mtg(fn):
                             label='Segment', 
                             x=x, y=y, 
                             time=time_v[i+1], 
-                            time_hours=time_hours_v[i+1])
+                            time_hours=time_hours_v[i+1],
+                            diameter= diams[i+1],
+                            )
                 indexes[axis_id].append(vid)
     return g2
 
@@ -109,7 +113,7 @@ def convert_nx(g):
 
     g_nx = nx.from_edgelist(edge_list, create_using=nx.DiGraph)
 
-    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label']
+    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label', 'diameter']
     for node in nodes:
         for prop in props:
             _prop = g.property(prop)
