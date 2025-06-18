@@ -99,8 +99,12 @@ def split(g):
 
 def convert_nx(g):
 
+    orders = algo.orders(g)
+    g.properties()['root_degree'] = orders
     max_scale = g.max_scale()
     root_id = next(g.component_roots_at_scale_iter(g.root, scale=max_scale))
+
+    root_coord =[g.node(root_id).x, g.node(root_id).y]
 
     edge_list = []
     nodes = list(traversal.pre_order2(g, vtx_id=root_id))
@@ -113,16 +117,35 @@ def convert_nx(g):
 
     g_nx = nx.from_edgelist(edge_list, create_using=nx.DiGraph)
 
-    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label', 'diameter']
+    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label', 'diameter', 'root_degree']
     for node in nodes:
         for prop in props:
             _prop = g.property(prop)
             if node in _prop:
                 g_nx.nodes[node][prop] = _prop.get(node)
 
-    return g_nx
+    # Adaptater to Ariadne 
+    # Compute LR_index
+    axis_root = g.complex(root_id)
+    lr_index = dict((vid, i) for i, vid in enumerate(traversal.pre_order2(g, vtx_id=axis_root)))
 
-                
+    for node in nodes:
+        g_nx.nodes[node]['LR_index'] = lr_index[g.complex(node)] if lr_index[g.complex(node)] else None
+
+    for node in g_nx.nodes:
+        x= g_nx.nodes[node]['x']-root_coord[0]
+        y= g_nx.nodes[node]['y']-root_coord[1]
+        g_nx.nodes[node]['pos'] = [x, y]
+        
+    tree_nx = nx.convert_node_labels_to_integers(g_nx)
+    return tree_nx
+
+
+
+
+
+
+
                 
 def test_all():
     """
