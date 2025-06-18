@@ -100,7 +100,7 @@ def split(g):
 def convert_nx(g):
 
     orders = algo.orders(g)
-    g.properties()['root_degree'] = orders
+    g.properties()['root_deg'] = orders
     max_scale = g.max_scale()
     root_id = next(g.component_roots_at_scale_iter(g.root, scale=max_scale))
 
@@ -117,7 +117,7 @@ def convert_nx(g):
 
     g_nx = nx.from_edgelist(edge_list, create_using=nx.DiGraph)
 
-    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label', 'diameter', 'root_degree']
+    props = ['x', 'y', 'time', 'time_hours', 'diameters', 'label', 'diameter', 'root_deg']
     for node in nodes:
         for prop in props:
             _prop = g.property(prop)
