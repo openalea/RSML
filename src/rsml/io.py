@@ -322,7 +322,7 @@ class Parser(object):
                 print('Invalid Annotation format', elt.tag)
 
 
-class Annotation(object):
+class Annotation:
     def __init__(self, name):
         self.name = name
         self.points = []
@@ -367,7 +367,7 @@ class Dumper(object):
     """ Convert an MTG into RSML format 
 
     """
-    accession = "{http://www.plantontology.org/xml-dtd/po.dtd}accession"
+    accession = "{https://www.plantontology.org/xml-dtd/po.dtd}accession"
     def dump(self, graph):
         self._g = graph
         self.mtg()
@@ -604,10 +604,12 @@ class Dumper(object):
 def rsml2mtg(rsml_graph, debug=False):
     """
     Convert a rsml string, or file, to a MTG.
+    The MTG is define at the axis scale. 
+    There is no clear topological connection between axes at segment scale. 
     """
     parser = Parser()
-    return parser.parse(rsml_graph, debug=debug)
-    
+    g = parser.parse(rsml_graph, debug=debug)
+    return g 
 
 def mtg2rsml(g, rsml_file):
     """
