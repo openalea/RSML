@@ -25,3 +25,4 @@ jobs:
     with:
       force-channel-priority: conda-forge, openalea3/label/dev, openalea3
       operating-system: '["ubuntu-latest", "macos-13", "windows-latest"]' # because of plantgl
+      rc-label: "dev"
