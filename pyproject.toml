@@ -6,6 +6,10 @@ build-backend = "setuptools.build_meta"
 
 # enable dynamic versioning based on git tags
 [tool.setuptools_scm]
+# Format version to ease alignment with conda/meta.yaml tag-based versioning
+fallback_version = "1.4.0.dev0"
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
 
 [project]
 name = "rsml"
@@ -18,20 +22,19 @@ authors = [
 license = "CECILL-C"
 license-files = ["LICEN[CS]E*"]
 keywords = ["OpenAlea", "RSML", "Plant Architecture"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Intended Audience :: Science/Research",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering",
 ]
 
 dependencies = [
-    "matplotlib",
     "pandas",
     "xlsxwriter",
     "path",
@@ -69,6 +72,7 @@ channels = [
 ]
 dependencies = [
     "openalea.mtg",
+    "matplotlib-base",
 ]
 
 [tool.setuptools.packages.find]
