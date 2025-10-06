@@ -12,7 +12,7 @@ version_scheme = "guess-next-dev"
 local_scheme = "no-local-version"
 
 [project]
-name = "rsml"
+name = "openalea.rsml"
 dynamic = ["version"]
 description = "RootSystemML (RSML) is a file format to represent root architectural data. This package is an openalea pckage to manage it, import/export between .rsml files and MTG, etc."
 readme = "README.md"
@@ -47,7 +47,7 @@ Homepage = "http://github.com/openalea/rsml"
 Discussions = "https://github.com/openalea/rsml/discussions"
 
 [project.entry-points."wralea"]
-mtg = "rsml_wralea"
+"rsml" = "openalea.rsml_wralea"
 
 [project.optional-dependencies]
 test = [
