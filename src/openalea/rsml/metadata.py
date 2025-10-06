@@ -2,7 +2,7 @@
 Manage rsml metadata attributes
 
 The metadata element in rsml contains some mandatory content and optional ones.
-In the IO operation from rsml file to&from mtg, these metadata are looked for 
+In the IO operation from openalea.rsml file to&from mtg, these metadata are looked for
 in the 'metadata' graph property of the mtg::
 
     mtg.graph_properties()['metadata']
