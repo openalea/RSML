@@ -26,7 +26,7 @@ The **rsml** python package provides:
 
 The **rsml** package is an openalea package that can be installed using conda or mamba:
 
-    mamba create -n rsml -c conda-forge -c openalea3 rsml
+    mamba create -n rsml -c conda-forge -c openalea3 openalea.rsml
     mamba activate rsml
     
 
@@ -40,7 +40,7 @@ To install it, go to the rsml folder and enter the following command::
 ### Use
 
 ```python
-    import rsml
+    import openalea.rsml as rsml
     
     # load rsml
     g = rsml.rsml2mtg( filename )
@@ -53,7 +53,7 @@ To install it, go to the rsml folder and enter the following command::
     rsml.mtg2rsml(g, filename)
     
     # export mesurements to tabular file
-    from rsml import measurements
+    from openalea.rsml import measurements
     measurements.export(g, filename[:-5]+'.csv')
 ```    
 

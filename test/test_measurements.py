@@ -19,7 +19,7 @@ def simple_tree():
     return g
 
 def test_length():
-    from rsml.measurements import root_length
+    from openalea.rsml.measurements import root_length
     
     g = simple_tree()
     L = root_length(g)
@@ -28,7 +28,7 @@ def test_length():
     assert sorted(L.values())==[1,3], 'invalid axe length'
     
 def test_RSML_Measurement():
-    from rsml.measurements import RSML_Measurements
+    from openalea.rsml.measurements import RSML_Measurements
     
     g = simple_tree()
     m = RSML_Measurements()

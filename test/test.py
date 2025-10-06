@@ -2,8 +2,8 @@
 N = 2
 
 from time import sleep
-from rsml.data import data_dir
-import rsml
+from openalea.rsml.data import data_dir
+import openalea.rsml as rsml
 
 img_dir = data_dir
 data = data_dir

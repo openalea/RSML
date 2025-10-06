@@ -34,7 +34,7 @@ def discrete_to_continuous(g, position='position'):
       - convert "discrete" functions (such as diameter)
       - convert continuous functions?
     """
-    from rsml.metadata import add_property_definition
+    from openalea.rsml.metadata import add_property_definition
     
     # accessor of the segment position property
     if isinstance(position, str):

@@ -10,7 +10,7 @@ from path import Path
 import numpy as np
 import pandas as pd
 
-import rsml
+import openalea.rsml
 
 
 def walk(dir: str, recursive=True):
