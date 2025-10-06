@@ -1,8 +1,8 @@
 """
 Tests for the measurements module
 """
-import rsml
-from rsml import hirros
+import openalea.rsml as rsml
+from openalea.rsml import hirros
 
 def get_mtg():
     fn = 'data/61_graph_expertized.rsml'

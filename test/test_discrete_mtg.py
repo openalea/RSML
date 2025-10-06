@@ -4,8 +4,8 @@ Test discrete mtg -> continuous -> rsml, and backward
 import pickle 
 
 def load_discrete():
-    from rsml.data import data_dir
-    import rsml
+    from openalea.rsml.data import data_dir
+    import openalea.rsml as rsml
     filename = data_dir/'discrete.bmtg'
     with open(filename, 'rb') as f:   # F. Bauget 2022-04-12: needs bytes
         g = pickle.load(f, encoding="latin1") # F. Bauget 2022-04-12: Python 2 bytestring data to Python 3
@@ -38,8 +38,8 @@ def simple_tree():
     return g
     
 def test_discrete_to_continuous():
-    from rsml.continuous import discrete_to_continuous
-    from rsml.continuous import continuous_to_discrete
+    from openalea.rsml.continuous import discrete_to_continuous
+    from openalea.rsml.continuous import continuous_to_discrete
     
     def test_tree(g0):
         gc = discrete_to_continuous(g0.copy())
