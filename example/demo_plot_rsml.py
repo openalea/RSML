@@ -1,8 +1,8 @@
 
-import rsml
-from rsml import misc
-from rsml import measurements
-from rsml.data import data_dir as rsml_dir
+import openalea.rsml as rsml
+from openalea.rsml import misc
+from openalea.rsml import measurements
+from openalea.rsml.data import data_dir as rsml_dir
 
 import numpy as np
 from matplotlib import pyplot as plt
