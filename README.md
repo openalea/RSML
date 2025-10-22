@@ -1,5 +1,11 @@
 # RSML
 
+[![Docs](https://readthedocs.org/projects/rsml/badge/?version=latest)](https://rsml.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://github.com/openalea/RSML/actions/workflows/openalea_ci.yml/badge.svg)](https://github.com/openalea/RSML/actions/workflows/openalea_ci.yml)
+[![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/downloads/)
+[![Anaconda-Server Badge](https://anaconda.org/openalea3/openalea.rsml/badges/version.svg)](https://anaconda.org/openalea3/openalea.rsml)
+[![License](https://img.shields.io/badge/License--CeCILL-C-blue)](https://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html)
+
 **Authors** : C. Pradal and J. Diener
 
 **Institutes** : INRIA / CIRAD
@@ -59,4 +65,4 @@ To install it, go to the rsml folder and enter the following command::
 
 ### Tutorial
 
-[RSML tutorial in Python](http://nbviewer.ipython.org/github/RootSystemML/RSML-conversion-tools/blob/master/python/rsml/example/RSML%20tutorial%20in%20Python.ipynb)
+[RSML tutorial in Python](https://github.com/openalea/RSML/blob/master/example/RSML_tutorial_in_Python.ipynb)
