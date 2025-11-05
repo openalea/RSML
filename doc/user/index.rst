@@ -17,7 +17,7 @@ reference guide, see :ref:`rsml_reference`.
    Many aspects of RSML are not covered.
 
    More documentation can be found on the
-   `openalea <http://openalea.gforge.inria.fr>`__ wiki.
+   `openalea <http://openalea.rtfd.io>`__ wiki.
 
 .. toctree::
 
