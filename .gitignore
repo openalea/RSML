@@ -87,6 +87,7 @@ target/
 
 # sphinx autogen file
 doc/_dvlpt/
+doc/_build/
 
 
 # #}

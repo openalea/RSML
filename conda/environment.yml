@@ -1,0 +1,13 @@
+name: rsml_dev
+channels:
+  - openalea3/label/dev
+  - openalea3/label/rc
+  - openalea3
+  - conda-forge
+dependencies:
+  - matplotlib-base
+  - openalea.mtg
+  # let pip install the rest using pyproject.toml (if you are okay with conda/pip mix)
+  - pip:
+      - -e .."[doc, test]"
+  

@@ -145,7 +145,7 @@ def multiple_plot(files, image=True):
     '''
     from openalea.core.path import path
     from matplotlib import pyplot as plt
-    import rsml
+    import openalea.rsml as rsml
     import os
 
     def get_file(f):    

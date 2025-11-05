@@ -7,7 +7,7 @@
 
 import numpy as np
 import rsml
-from rsml.continuous import *
+from openalea.rsml.continuous import *
 from openalea.mtg import MTG, traversal
 
 

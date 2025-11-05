@@ -4,7 +4,7 @@ Simple matching functionalities for RSML MTG trees
 
 import numpy as _np
 
-from rsml.misc import plant_vertices
+from openalea.rsml.misc import plant_vertices
 
 def match_plants(t1,t2, max_distance=None):
     """
@@ -114,7 +114,7 @@ def match_roots(t1,t2, plant_match, max_distance=None):
 
 def _match_root_axes(t1, axes1, t2, axes2, max_distance=None):
     """ return "best" match between axes in `axes1` and in `axes2` """
-    from rsml.misc import hausdorff_distance
+    from openalea.rsml.misc import hausdorff_distance
     
     # construct distance matrix
     geom1 = t1.property('geometry')

@@ -6,9 +6,13 @@ build-backend = "setuptools.build_meta"
 
 # enable dynamic versioning based on git tags
 [tool.setuptools_scm]
+# Format version to ease alignment with conda/meta.yaml tag-based versioning
+fallback_version = "1.4.0.dev0"
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
 
 [project]
-name = "rsml"
+name = "openalea.rsml"
 dynamic = ["version"]
 description = "RootSystemML (RSML) is a file format to represent root architectural data. This package is an openalea pckage to manage it, import/export between .rsml files and MTG, etc."
 readme = "README.md"
@@ -18,20 +22,19 @@ authors = [
 license = "CECILL-C"
 license-files = ["LICEN[CS]E*"]
 keywords = ["OpenAlea", "RSML", "Plant Architecture"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
   "Intended Audience :: Science/Research",
   "Intended Audience :: Developers",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering",
 ]
 
 dependencies = [
-    "matplotlib",
     "pandas",
     "xlsxwriter",
     "path",
@@ -44,7 +47,7 @@ Homepage = "http://github.com/openalea/rsml"
 Discussions = "https://github.com/openalea/rsml/discussions"
 
 [project.entry-points."wralea"]
-mtg = "rsml_wralea"
+"rsml" = "openalea.rsml_wralea"
 
 [project.optional-dependencies]
 test = [
@@ -55,7 +58,7 @@ doc = [
   "sphinx-rtd-theme",
   "pydata-sphinx-theme",
   "myst-parser",
-  "sphinx-favicon",
+  "sphinx-copybutton",
   "nbsphinx",
 ]
 
@@ -69,6 +72,7 @@ channels = [
 ]
 dependencies = [
     "openalea.mtg",
+    "matplotlib-base",
 ]
 
 [tool.setuptools.packages.find]
