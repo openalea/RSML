@@ -20,7 +20,7 @@ def match_plants(t1,t2, max_distance=None):
     
     The matching is done usinf `one_to_one_match`
     """
-    from operator import div
+    from operator import truediv as div
     
     # compute seed position of plants in t
     # ------------------------------------
