@@ -1,4 +1,4 @@
-""" XML SmartRoot / RootNav reader and writer
+""" XML SmartRoot / RootNav / RootSystemTracker reader and writer
 
 TODO:
   * Manage metadata
@@ -18,7 +18,7 @@ Visualisation:
 
 """
 ##############################################################################
-# XML SmartRoot / RootNav reader and writer
+# XML SmartRoot / RootNav / RootSystemTracker reader and writer
 ##############################################################################
 
 from ast import literal_eval
@@ -48,7 +48,17 @@ class Parser(object):
         root = doc.getroot()
         # recursive call of the functions to add neww plants/root axis to the MTG
         self.dispatch(root)
-
+        
+        graph = self._g 
+        if graph.graph_properties().get('metadata', {}).get('functions') is None: 
+            graph.graph_properties()['metadata']['functions'] = []
+            if graph.properties().get('time'):
+                graph.graph_properties()['metadata']['functions'].append('time')
+            if graph.properties().get('time_hours'):
+                graph.graph_properties()['metadata']['functions'].append('time_hours')
+            if graph.properties().get('diameter'):
+                graph.graph_properties()['metadata']['functions'].append('diameter')
+    
         g = fat_mtg(self._g)
 
         # Add metadata as property of the graph
@@ -87,6 +97,7 @@ class Parser(object):
         meta  = self._metadata = dict()
         gprop = self._g.graph_properties()
         #print([elt.tag for elt in elts])
+        pixel_size = None
         for elt in elts:
             elt_tag = elt.tag
             #print(elt_tag)
@@ -97,12 +108,20 @@ class Parser(object):
             elif elt_tag in ['user','file-key','software','unit']:
                 meta[elt_tag] = elt.text
             elif elt_tag in ["property-definitions","time-sequence","image",'private']:
-                #print(elt_tag)
                 self.dispatch(elt)
+            elif elt_tag == "observation-hours":
+                elt_text = elt.text
+                meta[elt_tag] = [literal_eval(v) for v in elt_text.split(',') if v]
+            elif elt_tag in ['size', 'pixel_size']:
+                pixel_size = float(elt.text) # RootSystemTracker use size for pixel_size before image element D:
             elif elt_tag=='mtg_graph_properties':
                 gprop.update(read_xml_tree(elt))
             else:
                 meta[elt_tag] = read_xml_tree(elt)
+        
+        if pixel_size:
+            meta['resolution'] = meta.get('image',{})
+            meta['image']['resolution'] = pixel_size
 
         gprop['metadata'] = meta
 
@@ -134,7 +153,7 @@ class Parser(object):
         label = prop.pop('label')
         if label:
             self._propdef[label]=prop
-
+    
     def time_sequence(self, elts, **properties):
         """ A plant with parameters and a recursive structure.
 
@@ -218,6 +237,7 @@ class Parser(object):
         self._polyline = []  # will store all points in `elts`
         self._time = []
         self._time_hours = []
+        # self._diameter = []
         for elt in elts:
             self.dispatch(elt)
 
@@ -230,13 +250,16 @@ class Parser(object):
         if self._time_hours :
             self._node.time_hours = self._time_hours
             self._time_hours = None
-
+        # if self._diameter :
+        #     self._node.diameter = self._diameter
+        #     self._diameter = None
 
     def point(self, elts, **properties):
         poly = self._polyline
         point = []
         times = self._time
         times_hours = self._time_hours
+        # diameters = self._diameter
         if properties:
             if 'x' in properties or 'coord_x' in properties:
                 coords = ['x', 'y', 'z']
@@ -250,13 +273,14 @@ class Parser(object):
                 coords = ['th', 'coord_th']
                 time_hours = [float(properties[c]) for c in coords if c in properties]
                 times_hours.append(time_hours[0])
+            # if 'diameter' in properties:
+            #     diameter = float(properties['diameter'])
+            #     diameters.append(diameter)
         else:
             point = [float(elt.text) for elt in elts]
         poly.append(point)
         
-        #print('point', point)
-        
-
+        #print('point', point)        
 
     def functions(self, elts, **properties):
         """ A root axis with geometry, functions, properties.
@@ -412,18 +436,26 @@ class Dumper(object):
     def metadata(self):
         g = self._g
         self.xml_meta = xml.SubElement(self.xml_root,'metadata')
-
         gmetadata = metadata.set_metadata(g)
         
         for tag in metadata.flat_metadata:
             self.SubElement(self.xml_meta, tag=tag, text=str(gmetadata[tag]))
-            
+        
         # image metadata
-                
+        self.observation_hours(gmetadata)
         self.image(gmetadata)
         self.property_definitions(gmetadata)
         # print('TODO: time-sequence')
         
+    def observation_hours(self,metadata):
+        """ dump observation-hours element of metadata """
+        obs = metadata.get('observation-hours') # List of observation hours
+        if obs is None: return
+        
+        obs_elt = self.SubElement(self.xml_meta, 'observation-hours')
+        txt = ','.join(str(hour) for hour in obs)
+        obs_elt.text = txt
+    
     def image(self,metadata):
         """ dump image element of metadata """
         image = metadata.get('image')
@@ -485,8 +517,6 @@ class Dumper(object):
 
             #     self.process_vertex(vid)
 
-
-
     def plant(self, vid):
         g = self._g
 
@@ -512,16 +542,17 @@ class Dumper(object):
         self.xml_nodes[vid] = axis = self.SubElement(xml_parent, 'root') 
 
         # set xml attributes
-        props = g[vid]
+        props = g[vid]   
         axis.attrib['id']    = str(props.pop('id', vid))
         axis.attrib['label'] = str(props.pop('label', g.label(vid)))
         if 'po:accession' in props:
             axis.attrib['po:accession'] = str(props.pop('po:accession'))
 
         # set xml axis element
-        self.properties(vid, axis)
-        ##self.functions(axis,**props)
         self.geometry(axis,**props)
+        self.functions(axis,**props)
+        self.properties(vid, axis)
+        
         
         # process children root axis
         # --------------------------
@@ -583,12 +614,12 @@ class Dumper(object):
         for tag in pname:
             if tag in props:
                 if functions_elt is None:
-                    functions_elt = self.SubElement(xml_elt, 'functions')
+                    functions_elt = self.SubElement(axis, 'functions')
                 function_elt = self.SubElement(functions_elt, 'function')
                 function_elt.attrib['domain'] = 'polyline'
-                function_elt.attrib['name'] = tag
+                function_elt.attrib['name'] = tag 
         
-                for sample in attrib[tag]:
+                for sample in props[tag]:
                     sample_elt = self.SubElement(function_elt, 'sample')
                     if isinstance(sample, (tuple, list)) and len(sample)  == 2:
                         sample_elt.attrib['position'] = str(sample[0])
@@ -596,8 +627,6 @@ class Dumper(object):
                     else:
                         sample_elt.attrib['value'] = str(sample)
                         
-                        
-
 ##########################################################################
 # Wrapper functions for OpenAlea usage.
 
