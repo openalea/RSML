@@ -7,12 +7,12 @@ Reference guide
 ###################################
 .. contents::
 
-.. currentmodule:: RSML.__init__
+.. currentmodule:: openalea.rsml.__init__
 
 
-:mod:`RSML` module
+:mod:`openalea.rsml` module
 ===============================================
-.. automodule:: RSML.__init__
+.. automodule:: openalea.rsml.__init__
     :members:
     :undoc-members:
     :inherited-members:

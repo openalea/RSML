@@ -3,7 +3,7 @@
 
 .. _rsml:
 
-.. module:: rsml
+.. module:: openales.rsml
 
 RSML documentation
 #########################################################################
@@ -38,7 +38,7 @@ Documentation
 .. seealso::
 
    More documentation can be found on the
-   `openalea <http://openalea.gforge.inria.fr/dokuwiki/doku.php?id=packages::rsml:rsml>`__ wiki.
+   `openalea <https://openalea.rtfd.io>`__ documentation.
 
 Authors
 =======
@@ -58,4 +58,4 @@ License
 .. note:: `Cecill-C <http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html>`_ 
     license is a LGPL compatible license.
 
-.. |rsml| replace:: RSML
+.. |rsml| replace:: openalea.rsml
