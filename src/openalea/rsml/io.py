@@ -49,6 +49,7 @@ class Parser(object):
         # recursive call of the functions to add neww plants/root axis to the MTG
         self.dispatch(root)
         
+        # if some functions are defined in the MTG properties but not in metadata, add them
         graph = self._g 
         if graph.graph_properties().get('metadata', {}).get('functions') is None: 
             graph.graph_properties()['metadata']['functions'] = []
