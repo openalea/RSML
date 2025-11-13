@@ -25,14 +25,13 @@ Optional metadata:
 function also fill missing items, folowing the specified behavior describe in
 the function documentation.
 """
-import xml.etree.ElementTree as xml
-
 
 # ordered list of metadata attribute name
 flat_metadata = ['version','unit','resolution','software','user',
                    'last-modified','file-key']
 metadata_names = flat_metadata + ['image', 'property-definitions',
                                   'function-definitions', 'time-sequence',
+                                  'observation-hours',
                                   'private']
 
 # default values
@@ -91,9 +90,17 @@ def set_metadata(g):
                 from os.path import getctime
                 creation = getctime(image['name'])
                 image['captured'] = datetime.fromtimestamp(creation).isoformat()
+            except KeyError: # not defined
+                pass 
             except OSError: # no such file
                 pass
-        
+    
+    if 'observation-hours' in metadata:
+        # table of observation times
+        obs = metadata['observation-hours']
+        if isinstance(obs, str):
+            import ast
+            metadata['observation-hours'] = list(ast.literal_eval(obs)) # convert string to list
     
     if metadata['file-key']!=default['file-key']:
         import uuid
