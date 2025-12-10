@@ -51,7 +51,7 @@ def read(fn):
 
 def times(g):
     """Return Observation dates in hours."""
-    obs_t = g._graph_properties['metadata']['observation-hours'].split(',')
+    obs_t = g._graph_properties['metadata']['observation-hours']
     observations = [float(t) for t in obs_t]
     return observations
 
