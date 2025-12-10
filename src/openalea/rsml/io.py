@@ -121,8 +121,9 @@ class Parser(object):
                 meta[elt_tag] = read_xml_tree(elt)
         
         if pixel_size:
-            meta['resolution'] = meta.get('image',{})
-            meta['image']['resolution'] = pixel_size
+            # BUG : resolution now is similar to image
+            meta['resolution'] = pixel_size
+            meta.setdefault('image',{})['resolution'] = pixel_size
 
         gprop['metadata'] = meta
 
