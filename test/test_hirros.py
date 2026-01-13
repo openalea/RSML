@@ -26,7 +26,11 @@ def test_observations():
     plant_ids = g.vertices(scale=1)
     prims = hirros.primaries(g, plant_ids, obs)
  
-
+def test_fix_bug_resolution():
+    g = get_mtg()
+    meta = g._graph_properties['metadata']
+    assert meta['resolution'] == 76.
+    assert meta['image'] != meta['resolution']
 
 def test1():
     "Returns secondary dataframe"
