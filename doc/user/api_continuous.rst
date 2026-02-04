@@ -1,7 +1,7 @@
 .. currentmodule:: openalea.rsml.continuous
 
 continuous API
-===============================================
+==============
 .. automodule:: openalea.rsml.continuous
     :members:
     :exclude-members:

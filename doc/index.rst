@@ -6,8 +6,7 @@ Welcome to OpenAlea RSML's documentation!
     :maxdepth: 1
     :caption: Contents:
 
-    User Guide<user/index.rst>   
-    Reference Guide<user/autosum.rst>
+    api.rst
 
 Authors
 =======
