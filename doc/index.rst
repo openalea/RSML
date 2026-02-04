@@ -2,21 +2,30 @@
 Welcome to OpenAlea RSML's documentation!
 #########################################
 
+RootSystemML (RSML) is a file format to represent root architectural data (see https://rootsystemml.github.io/ ).
+
+OpenAlea RSML is a python package that provides:
+
+- import/export between .rsml files and MTG
+- 2D and 3D plot
+- standard root system measurements
+- export to table file
+
+
 .. toctree::
     :maxdepth: 1
     :caption: Contents:
 
+    installation.rst
+    quick_start.rst
+    gallery.rst
     api.rst
+    references.rst
 
 Authors
 =======
 
 .. include:: ../AUTHORS.txt
-
-ChangeLog
-=========
-
-.. include:: ../ChangeLog.txt
 
 License
 =======
