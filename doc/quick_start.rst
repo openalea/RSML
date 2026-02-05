@@ -6,7 +6,7 @@ Import necessay libray
 
 .. code-block:: python
 
-    import openalea.rsml as rsml
+    from openalea import rsml
     from openalea.rsml.data import data_dir
     from openalea.rsml.plot import plot2d, plot3d
 
