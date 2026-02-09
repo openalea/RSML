@@ -118,6 +118,11 @@ html_show_copyright = True
 # Output file base name for HTML help builder.
 htmlhelp_basename = project + '_documentation'
 
+# images used for the nbgallery
+nbsphinx_thumbnails = {
+    "example/RSML_tutorial": "_static/RSML_tutorial.png",
+}
+
 # Add infomation about github repository
 html_context = {
     # "github_url": "https://github.com", # or your GitHub Enterprise site
